@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 1: Gemini + NotebookLM | Curso de Gilberto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4285f4;
+            --primary-dark: #1a73e8;
+            --secondary: #34a853;
+            --accent: #ea4335;
+            --warning: #fbbc04;
+            --dark: #202124;
+            --light: #f8f9fa;
+            --gray: #5f6368;
+            --border: #dadce0;
+            --gemini-gradient: linear-gradient(135deg, #4285f4, #9b72cb, #d96570);
+            --notebook-gradient: linear-gradient(135deg, #34a853, #4285f4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.7;
+        }
+
+        /* Header Hero */
+        .hero {
+            background: var(--gemini-gradient);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Navigation */
+        .nav-container {
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+            padding: 15px 20px;
+            overflow-x: auto;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: var(--gray);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .nav a:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .nav a.gemini { border-left: 3px solid var(--primary); }
+        .nav a.notebook { border-left: 3px solid var(--secondary); }
+        .nav a.ejercicios { border-left: 3px solid var(--accent); }
+
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Section Styling */
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .section-icon.gemini {
+            background: var(--gemini-gradient);
+        }
+
+        .section-icon.notebook {
+            background: var(--notebook-gradient);
+        }
+
+        .section-icon.ejercicio {
+            background: linear-gradient(135deg, var(--accent), var(--warning));
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 30px 0 15px;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray);
+            margin: 20px 0 10px;
+        }
+
+        p {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        /* Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .feature-card {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .feature-card h4 {
+            margin-top: 0;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* Steps */
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: var(--light);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            background: var(--primary);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            margin: 0 0 8px;
+            color: var(--dark);
+        }
+
+        .step-content p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Code/URL blocks */
+        .url-block {
+            background: var(--dark);
+            color: #e8eaed;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .url-block a {
+            color: #8ab4f8;
+        }
+
+        /* Tips */
+        .tip {
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            border-left: 4px solid var(--secondary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-left: 4px solid var(--warning);
+        }
+
+        .warning .tip-title {
+            color: #f57c00;
+        }
+
+        /* Ejercicio Box */
+        .ejercicio {
+            background: linear-gradient(135deg, #fce4ec, #f3e5f5);
+            border: 2px solid #e91e63;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .ejercicio h4 {
+            color: #c2185b;
+            font-size: 1.2rem;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ejercicio ol {
+            margin-left: 20px;
+            color: var(--dark);
+        }
+
+        .ejercicio li {
+            margin-bottom: 10px;
+        }
+
+        /* Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95rem;
+        }
+
+        .comparison-table th {
+            background: var(--dark);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table tr:hover {
+            background: var(--light);
+        }
+
+        .comparison-table .check {
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: var(--gray);
+        }
+
+        /* Keyboard shortcuts */
+        kbd {
+            background: var(--light);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 0 var(--border);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--dark);
+            color: white;
+        }
+
+        .footer p {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .footer a {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 25px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .nav-container {
+                display: none;
+            }
+
+            .section {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<header class="hero">
+    <div class="hero-content">
+        <h1>🚀 Gemini + NotebookLM</h1>
+        <p class="subtitle">Domina las herramientas de IA de Google para potenciar tu productividad</p>
+        <span class="badge">📚 Clase 1 | Curso de Gilberto</span>
+    </div>
+</header>
+
+<!-- Navigation -->
+<div class="nav-container">
+    <nav class="nav">
+        <a href="#intro" class="gemini">📖 Introducción</a>
+        <a href="#gemini" class="gemini">✨ Gemini</a>
+        <a href="#notebook" class="notebook">📓 NotebookLM</a>
+        <a href="#comparacion" class="gemini">⚖️ Comparación</a>
+        <a href="#ejercicios" class="ejercicios">🎯 Ejercicios</a>
+        <a href="#recursos" class="notebook">🔗 Recursos</a>
+    </nav>
+</div>
+
+<!-- Main Content -->
+<main class="container">
+
+    <!-- Introducción -->
+    <section id="intro" class="section">
+        <div class="section-header">
+            <div class="section-icon gemini">📖</div>
+            <h2>Introducción</h2>
+        </div>
+
+        <p>En esta clase aprenderás a utilizar dos de las herramientas más poderosas de Google para potenciar tu trabajo con inteligencia artificial:</p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>✨ Google Gemini</h4>
+                <p>El asistente de IA conversacional de Google, capaz de razonar, crear contenido, analizar imágenes, código y mucho más.</p>
+            </div>
+            <div class="feature-card">
+                <h4>📓 NotebookLM</h4>
+                <p>Tu asistente de investigación personal que analiza TUS documentos y genera resúmenes, podcasts y más.</p>
+            </div>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">💡 Objetivo de la clase</div>
+            <p>Al finalizar, podrás usar Gemini para tareas conversacionales y creativas, y NotebookLM para investigación profunda basada en tus propios documentos.</p>
+        </div>
+    </section>
+
+    <!-- GEMINI -->
+    <section id="gemini" class="section">
+        <div class="section-header">
+            <div class="section-icon gemini">✨</div>
+            <h2>Google Gemini</h2>
+        </div>
+
+        <h3>¿Qué es Gemini?</h3>
+        <p>Gemini es el asistente de IA más avanzado de Google. A diferencia de un simple chatbot, Gemini puede:</p>
+        <ul>
+            <li>Razonar sobre problemas complejos con <strong>Gemini 3 Pro</strong></li>
+            <li>Analizar imágenes, documentos y código</li>
+            <li>Conectarse con tus apps de Google (Gmail, Drive, YouTube)</li>
+            <li>Crear contenido escrito, visual y hasta video</li>
+        </ul>
+
+        <h3>Cómo acceder a Gemini</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-content">
+                    <h4>Ir al portal de Gemini</h4>
+                    <p>Visita <strong>gemini.google.com</strong> e inicia sesión con tu cuenta de Google</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Configurar extensiones</h4>
+                    <p>Ve a ⚙️ Configuración → Extensiones → Activa Gmail, Drive, YouTube, Maps</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>¡Empieza a conversar!</h4>
+                    <p>Escribe tu primera pregunta o solicitud en el chat</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="url-block">
+            🔗 <a href="https://gemini.google.com" target="_blank">https://gemini.google.com</a>
+        </div>
+
+        <h3>Características Principales (2026)</h3>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>🧩 Gems (Asistentes personalizados)</h4>
+                <p>Crea mini-asistentes con instrucciones específicas. Ejemplo: un Gem para revisar gramática, otro para planificar comidas. Las instrucciones se guardan permanentemente.</p>
+            </div>
+            <div class="feature-card">
+                <h4>📝 Gemini Canvas</h4>
+                <p>Espacio de escritura colaborativa con la IA. Selecciona texto específico y pide cambios ("hazlo más formal", "simplifica esto"). Ideal para documentos largos.</p>
+            </div>
+            <div class="feature-card">
+                <h4>🧠 Personal Intelligence</h4>
+                <p>Conecta Gmail, Fotos, YouTube y Search. Gemini entiende TU contexto personal y da respuestas personalizadas basadas en tu información.</p>
+            </div>
+            <div class="feature-card">
+                <h4>🎬 Scene Builder</h4>
+                <p>Crea videos con personajes consistentes. Si generas un personaje, se mantiene igual en todas las escenas del video.</p>
+            </div>
+        </div>
+
+        <h3>Ejemplos de prompts efectivos</h3>
+
+        <h4>Para escritura:</h4>
+        <div class="url-block">
+            "Actúa como un editor profesional. Revisa este texto y mejora la claridad sin cambiar el tono: [pegar texto]"
+        </div>
+
+        <h4>Para análisis de imágenes:</h4>
+        <div class="url-block">
+            "Analiza esta imagen y descríbeme: 1) Qué ves, 2) El contexto probable, 3) Detalles que podrían pasarse por alto"
+        </div>
+
+        <h4>Para código:</h4>
+        <div class="url-block">
+            "Revisa este código Python, identifica errores potenciales y sugiere mejoras de rendimiento: [pegar código]"
+        </div>
+
+        <h4>Para planificación:</h4>
+        <div class="url-block">
+            "Busca en mi Gmail los correos de la última semana relacionados con el proyecto X y hazme un resumen de las tareas pendientes"
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">💡 Consejo Pro</div>
+            <p>Usa el formato: <strong>ROL + CONTEXTO + TAREA + FORMATO</strong> para obtener mejores resultados. Ejemplo: "Eres un experto en marketing (ROL). Tengo una tienda de ropa online (CONTEXTO). Escríbeme 5 ideas de posts para Instagram (TAREA) en formato de lista con emojis (FORMATO)."</p>
+        </div>
+
+        <h3>Planes y precios</h3>
+        <table class="comparison-table">
+            <tr>
+                <th>Plan</th>
+                <th>Precio</th>
+                <th>Características</th>
+            </tr>
+            <tr>
+                <td><strong>Gratuito</strong></td>
+                <td>$0</td>
+                <td>Gemini 2.0 Flash, uso limitado, funciones básicas</td>
+            </tr>
+            <tr>
+                <td><strong>AI Pro</strong></td>
+                <td>$19.99/mes</td>
+                <td>Gemini 3 Pro, Personal Intelligence, Gems, Canvas, 5x más límites</td>
+            </tr>
+            <tr>
+                <td><strong>AI Ultra</strong></td>
+                <td>$249.99/mes</td>
+                <td>Gemini 3 Deep Think, máxima capacidad de razonamiento</td>
+            </tr>
+        </table>
+
+        <div class="ejercicio">
+            <h4>🎯 Ejercicio 1: Tu primer Gem</h4>
+            <ol>
+                <li>Abre <a href="https://gemini.google.com" target="_blank">gemini.google.com</a></li>
+                <li>Haz clic en "Gem manager" en el menú lateral</li>
+                <li>Crea un nuevo Gem llamado "Corrector de español"</li>
+                <li>En las instrucciones escribe: "Eres un corrector de español profesional. Cuando te envíe un texto, corrige ortografía, gramática y puntuación. Explica brevemente cada corrección."</li>
+                <li>Guarda y pruébalo con un texto que tenga errores intencionales</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- NOTEBOOKLM -->
+    <section id="notebook" class="section">
+        <div class="section-header">
+            <div class="section-icon notebook">📓</div>
+            <h2>Google NotebookLM</h2>
+        </div>
+
+        <h3>¿Qué es NotebookLM?</h3>
+        <p>NotebookLM es tu asistente de investigación personal. A diferencia de Gemini (que responde sobre conocimiento general), NotebookLM <strong>SOLO</strong> responde basándose en los documentos que TÚ subes.</p>
+
+        <div class="warning">
+            <div class="tip-title">⚠️ Diferencia clave</div>
+            <p><strong>Gemini</strong> = Sabe de todo (conocimiento general de internet)<br>
+            <strong>NotebookLM</strong> = Solo sabe lo que tú le das (tus documentos específicos)</p>
+        </div>
+
+        <h3>Cómo empezar</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-content">
+                    <h4>Accede a NotebookLM</h4>
+                    <p>Visita <strong>notebooklm.google.com</strong> e inicia sesión con Google</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Crea un nuevo Notebook</h4>
+                    <p>Haz clic en "Create New Notebook" y dale un nombre descriptivo</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Sube tus fuentes</h4>
+                    <p>Arrastra PDFs, Google Docs, URLs de sitios web, o enlaces de YouTube</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Empieza a preguntar</h4>
+                    <p>NotebookLM generará automáticamente un resumen y temas clave. ¡Pregunta lo que necesites!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="url-block">
+            🔗 <a href="https://notebooklm.google.com" target="_blank">https://notebooklm.google.com</a>
+        </div>
+
+        <h3>Fuentes soportadas</h3>
+        <ul>
+            <li>📄 <strong>PDFs</strong> — Hasta 200 MB y 500,000 palabras por archivo</li>
+            <li>📝 <strong>Google Docs</strong> — Vinculación directa desde Drive</li>
+            <li>🌐 <strong>URLs de sitios web</strong> — Artículos, blogs, documentación</li>
+            <li>🎥 <strong>YouTube</strong> — Transcripciones de videos</li>
+            <li>📋 <strong>Texto copiado</strong> — Pega directamente texto</li>
+        </ul>
+
+        <h3>Características Principales (2026)</h3>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>🎙️ Audio Overviews</h4>
+                <p>Genera "podcasts" de tus documentos. Dos voces de IA discuten el contenido en formato conversacional. Ideal para aprender mientras caminas o manejas.</p>
+            </div>
+            <div class="feature-card">
+                <h4>🃏 Flashcards y Quizzes</h4>
+                <p>Convierte cualquier documento en tarjetas de estudio o cuestionarios. Personaliza el nivel de dificultad y comparte con otros estudiantes.</p>
+            </div>
+            <div class="feature-card">
+                <h4>📊 Data Tables</h4>
+                <p>Extrae datos estructurados de documentos desordenados. Convierte información en tablas que puedes analizar, filtrar y exportar.</p>
+            </div>
+            <div class="feature-card">
+                <h4>🎯 Notebook Goals</h4>
+                <p>Configura el "modo" del notebook: aprendizaje guiado, investigación PhD, abogado del diablo, resúmenes ejecutivos, análisis técnico profundo.</p>
+            </div>
+        </div>
+
+        <h3>Formatos de salida automáticos</h3>
+        <table class="comparison-table">
+            <tr>
+                <th>Formato</th>
+                <th>Descripción</th>
+                <th>Ideal para</th>
+            </tr>
+            <tr>
+                <td><strong>Briefing Document</strong></td>
+                <td>Resumen ejecutivo del tema</td>
+                <td>Reuniones rápidas, decisiones</td>
+            </tr>
+            <tr>
+                <td><strong>Study Guide</strong></td>
+                <td>Puntos clave organizados</td>
+                <td>Preparar exámenes, repasar</td>
+            </tr>
+            <tr>
+                <td><strong>FAQ</strong></td>
+                <td>Preguntas y respuestas comunes</td>
+                <td>Documentación, soporte</td>
+            </tr>
+            <tr>
+                <td><strong>Timeline</strong></td>
+                <td>Eventos en orden cronológico</td>
+                <td>Historia, proyectos, procesos</td>
+            </tr>
+            <tr>
+                <td><strong>Table of Contents</strong></td>
+                <td>Estructura del documento</td>
+                <td>Navegación, organización</td>
+            </tr>
+        </table>
+
+        <h3>Citaciones inteligentes</h3>
+        <p>Cada respuesta de NotebookLM incluye <strong>citaciones inline</strong> que te llevan directamente a la parte exacta del documento fuente. Esto te permite:</p>
+        <ul>
+            <li>✅ Verificar que la información es correcta</li>
+            <li>✅ Leer más contexto si lo necesitas</li>
+            <li>✅ Confiar en las respuestas (no hay "alucinaciones")</li>
+        </ul>
+
+        <div class="tip">
+            <div class="tip-title">💡 Privacidad garantizada</div>
+            <p>Google ha confirmado que tus documentos en NotebookLM <strong>NO se usan para entrenar sus modelos</strong>. Tu notebook es un contenedor privado y seguro.</p>
+        </div>
+
+        <h3>Planes de NotebookLM</h3>
+        <table class="comparison-table">
+            <tr>
+                <th>Plan</th>
+                <th>Notebooks</th>
+                <th>Fuentes por notebook</th>
+                <th>Deep Research/día</th>
+            </tr>
+            <tr>
+                <td><strong>Gratuito</strong></td>
+                <td>100</td>
+                <td>50</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td><strong>AI Pro ($20/mes)</strong></td>
+                <td>500</td>
+                <td>300</td>
+                <td>20</td>
+            </tr>
+        </table>
+
+        <div class="ejercicio">
+            <h4>🎯 Ejercicio 2: Tu primer Audio Overview</h4>
+            <ol>
+                <li>Abre <a href="https://notebooklm.google.com" target="_blank">notebooklm.google.com</a></li>
+                <li>Crea un nuevo notebook llamado "Práctica Clase 1"</li>
+                <li>Sube un PDF de un artículo o tema que te interese (o usa una URL de Wikipedia)</li>
+                <li>Espera que NotebookLM procese y genere el resumen automático</li>
+                <li>Haz clic en "Generate Audio Overview"</li>
+                <li>Escucha el "podcast" generado sobre tu documento</li>
+                <li>Prueba a hacer preguntas específicas sobre el contenido</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- COMPARACIÓN -->
+    <section id="comparacion" class="section">
+        <div class="section-header">
+            <div class="section-icon gemini">⚖️</div>
+            <h2>Gemini vs NotebookLM: ¿Cuándo usar cada uno?</h2>
+        </div>
+
+        <table class="comparison-table">
+            <tr>
+                <th>Criterio</th>
+                <th>Gemini ✨</th>
+                <th>NotebookLM 📓</th>
+            </tr>
+            <tr>
+                <td><strong>Fuente de conocimiento</strong></td>
+                <td>Internet + tus apps de Google</td>
+                <td>SOLO tus documentos subidos</td>
+            </tr>
+            <tr>
+                <td><strong>Ideal para</strong></td>
+                <td>Preguntas generales, creatividad, tareas variadas</td>
+                <td>Investigación profunda sobre documentos específicos</td>
+            </tr>
+            <tr>
+                <td><strong>Citaciones</strong></td>
+                <td>A veces, no siempre precisas</td>
+                <td class="check">✓ Siempre, con link al párrafo exacto</td>
+            </tr>
+            <tr>
+                <td><strong>Audio</strong></td>
+                <td>Puede leer en voz alta</td>
+                <td class="check">✓ Genera podcasts conversacionales</td>
+            </tr>
+            <tr>
+                <td><strong>Flashcards/Quizzes</strong></td>
+                <td>Puede crear si le pides</td>
+                <td class="check">✓ Función nativa optimizada</td>
+            </tr>
+            <tr>
+                <td><strong>Imágenes</strong></td>
+                <td class="check">✓ Analiza y genera imágenes</td>
+                <td>No procesa imágenes</td>
+            </tr>
+            <tr>
+                <td><strong>Código</strong></td>
+                <td class="check">✓ Escribe, revisa, ejecuta</td>
+                <td>Solo analiza si está en documentos</td>
+            </tr>
+            <tr>
+                <td><strong>Conexión con apps</strong></td>
+                <td class="check">✓ Gmail, Drive, YouTube, Maps</td>
+                <td>Solo fuentes que subes manualmente</td>
+            </tr>
+        </table>
+
+        <h3>Regla simple para decidir:</h3>
+        <div class="features-grid">
+            <div class="feature-card" style="border-left: 4px solid var(--primary);">
+                <h4>Usa Gemini cuando...</h4>
+                <ul style="margin-left: 15px;">
+                    <li>Necesitas información general</li>
+                    <li>Quieres crear contenido nuevo</li>
+                    <li>Trabajas con imágenes o código</li>
+                    <li>Necesitas buscar en tus emails/Drive</li>
+                </ul>
+            </div>
+            <div class="feature-card" style="border-left: 4px solid var(--secondary);">
+                <h4>Usa NotebookLM cuando...</h4>
+                <ul style="margin-left: 15px;">
+                    <li>Tienes documentos específicos para analizar</li>
+                    <li>Necesitas citaciones verificables</li>
+                    <li>Quieres estudiar un tema (flashcards)</li>
+                    <li>Prefieres escuchar (Audio Overview)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- EJERCICIOS FINALES -->
+    <section id="ejercicios" class="section">
+        <div class="section-header">
+            <div class="section-icon ejercicio">🎯</div>
+            <h2>Ejercicios Prácticos</h2>
+        </div>
+
+        <div class="ejercicio">
+            <h4>🎯 Ejercicio 3: Workflow combinado</h4>
+            <p>Combina ambas herramientas para un proyecto real:</p>
+            <ol>
+                <li><strong>En Gemini:</strong> Pide "Dame 5 artículos recientes sobre [tema de tu interés]"</li>
+                <li><strong>Copia las URLs</strong> de los artículos que te recomiende</li>
+                <li><strong>En NotebookLM:</strong> Crea un notebook y añade esas URLs como fuentes</li>
+                <li><strong>Genera:</strong> Un "Briefing Document" con los puntos clave</li>
+                <li><strong>Crea:</strong> Flashcards para estudiar los conceptos</li>
+                <li><strong>Genera:</strong> Un Audio Overview para repasar mientras haces otra cosa</li>
+            </ol>
+        </div>
+
+        <div class="ejercicio">
+            <h4>🎯 Ejercicio 4: Asistente de estudio personal</h4>
+            <ol>
+                <li>Elige un tema que necesites aprender (puede ser para trabajo o estudio)</li>
+                <li><strong>En Gemini:</strong> Crea un Gem llamado "Tutor de [tema]" con instrucciones como: "Eres un profesor experto en [tema]. Explica conceptos de forma simple con ejemplos. Después de explicar, hazme una pregunta para verificar que entendí."</li>
+                <li><strong>En NotebookLM:</strong> Sube material de estudio (PDFs, apuntes, videos de YouTube)</li>
+                <li>Usa el Gem de Gemini para entender conceptos generales</li>
+                <li>Usa NotebookLM para profundizar con tu material específico</li>
+            </ol>
+        </div>
+
+        <div class="ejercicio">
+            <h4>🎯 Ejercicio 5: Análisis de documentos de trabajo</h4>
+            <ol>
+                <li>Sube a NotebookLM 3-5 documentos de un proyecto actual (reportes, emails importantes, documentación)</li>
+                <li>Pregunta: "¿Cuáles son los principales riesgos mencionados en estos documentos?"</li>
+                <li>Pregunta: "Resume las decisiones clave que se han tomado"</li>
+                <li>Genera una FAQ basada en los documentos</li>
+                <li>Crea un Timeline de eventos importantes</li>
+                <li>Exporta todo como documento para compartir con tu equipo</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- RECURSOS -->
+    <section id="recursos" class="section">
+        <div class="section-header">
+            <div class="section-icon notebook">🔗</div>
+            <h2>Recursos adicionales</h2>
+        </div>
+
+        <h3>Enlaces oficiales</h3>
+        <ul>
+            <li>🔗 <a href="https://gemini.google.com" target="_blank">Gemini</a> — gemini.google.com</li>
+            <li>🔗 <a href="https://notebooklm.google.com" target="_blank">NotebookLM</a> — notebooklm.google.com</li>
+            <li>🔗 <a href="https://support.google.com/notebooklm" target="_blank">Ayuda de NotebookLM</a></li>
+            <li>🔗 <a href="https://gemini.google/release-notes/" target="_blank">Novedades de Gemini</a></li>
+        </ul>
+
+        <h3>Atajos de teclado útiles</h3>
+        <table class="comparison-table">
+            <tr>
+                <th>Acción</th>
+                <th>Gemini</th>
+                <th>NotebookLM</th>
+            </tr>
+            <tr>
+                <td>Nueva conversación</td>
+                <td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>O</kbd></td>
+                <td><kbd>Ctrl</kbd> + <kbd>N</kbd></td>
+            </tr>
+            <tr>
+                <td>Enviar mensaje</td>
+                <td><kbd>Enter</kbd></td>
+                <td><kbd>Enter</kbd></td>
+            </tr>
+            <tr>
+                <td>Nueva línea (sin enviar)</td>
+                <td><kbd>Shift</kbd> + <kbd>Enter</kbd></td>
+                <td><kbd>Shift</kbd> + <kbd>Enter</kbd></td>
+            </tr>
+        </table>
+
+        <div class="tip">
+            <div class="tip-title">📌 Para la próxima clase</div>
+            <p>Practica los ejercicios de esta clase. En la siguiente sesión profundizaremos en técnicas avanzadas de prompting y automatización con estas herramientas.</p>
+        </div>
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>📚 Clase 1: Gemini + NotebookLM | Curso de Gilberto</p>
+    <p>Material creado por <strong>SOUL CORE</strong> — 2026</p>
+</footer>
+
+</body>
+</html>

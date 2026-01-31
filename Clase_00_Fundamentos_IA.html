@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 0: Fundamentos de IA | Curso de Gilberto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e1e2e;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --border: #e2e8f0;
+            --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-card: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.7;
+        }
+
+        /* Hero */
+        .hero {
+            background: var(--gradient-hero);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Navigation */
+        .nav-container {
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+            padding: 15px 20px;
+            overflow-x: auto;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: var(--gray);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.3s;
+            border-left: 3px solid var(--primary);
+        }
+
+        .nav a:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Sections */
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--gradient-hero);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 30px 0 15px;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray);
+            margin: 20px 0 10px;
+        }
+
+        p {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        /* Definition Box */
+        .definition {
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+            border-left: 4px solid var(--primary);
+            padding: 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .definition-term {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .definition p {
+            color: var(--dark);
+            margin-bottom: 0;
+            font-size: 1.05rem;
+        }
+
+        /* Concept Cards */
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .concept-card {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .concept-card .emoji {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .concept-card h4 {
+            margin-top: 0;
+            color: var(--dark);
+        }
+
+        .concept-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* Visual Diagram */
+        .diagram {
+            background: var(--dark);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 25px 0;
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: auto;
+        }
+
+        .diagram-title {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .diagram pre {
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .code-block .comment {
+            color: #94a3b8;
+        }
+
+        .code-block .keyword {
+            color: #f472b6;
+        }
+
+        .code-block .string {
+            color: #a5f3fc;
+        }
+
+        /* Tips */
+        .tip {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border-left: 4px solid var(--secondary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: #059669;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-left: 4px solid var(--accent);
+        }
+
+        .warning .tip-title {
+            color: #d97706;
+        }
+
+        .danger {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            border-left: 4px solid var(--danger);
+        }
+
+        .danger .tip-title {
+            color: #dc2626;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95rem;
+        }
+
+        .comparison-table th {
+            background: var(--dark);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table tr:hover {
+            background: var(--light);
+        }
+
+        /* Visual scale */
+        .scale {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+            padding: 20px;
+            background: var(--light);
+            border-radius: 12px;
+        }
+
+        .scale-bar {
+            flex: 1;
+            height: 20px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        /* Examples */
+        .example-box {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .example-box h4 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        .example-good {
+            border-color: var(--secondary);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .example-bad {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .example-label {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .example-good .example-label {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .example-bad .example-label {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Ejercicio */
+        .ejercicio {
+            background: linear-gradient(135deg, #fae8ff, #e9d5ff);
+            border: 2px solid #a855f7;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .ejercicio h4 {
+            color: #7c3aed;
+            font-size: 1.2rem;
+            margin-top: 0;
+        }
+
+        .ejercicio ol {
+            margin-left: 20px;
+            color: var(--dark);
+        }
+
+        .ejercicio li {
+            margin-bottom: 10px;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: var(--gray);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--dark);
+            color: white;
+        }
+
+        .footer p {
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 25px;
+            }
+
+            .concepts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            .nav-container {
+                display: none;
+            }
+
+            .section {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hero -->
+<header class="hero">
+    <div class="hero-content">
+        <h1>🧠 Fundamentos de IA</h1>
+        <p class="subtitle">Lo que necesitas saber antes de usar herramientas de Inteligencia Artificial</p>
+        <span class="badge">📚 Clase 0 | Curso de Gilberto</span>
+    </div>
+</header>
+
+<!-- Navigation -->
+<div class="nav-container">
+    <nav class="nav">
+        <a href="#que-es-ia">🤖 ¿Qué es IA?</a>
+        <a href="#tipos">📊 Tipos de IA</a>
+        <a href="#prompt">💬 ¿Qué es un Prompt?</a>
+        <a href="#conceptos">🔑 Conceptos Clave</a>
+        <a href="#prompting">✨ Prompting Efectivo</a>
+        <a href="#limitaciones">⚠️ Limitaciones</a>
+        <a href="#ejercicios">🎯 Ejercicios</a>
+    </nav>
+</div>
+
+<!-- Main Content -->
+<main class="container">
+
+    <!-- ¿Qué es IA? -->
+    <section id="que-es-ia" class="section">
+        <div class="section-header">
+            <div class="section-icon">🤖</div>
+            <h2>¿Qué es la Inteligencia Artificial?</h2>
+        </div>
+
+        <div class="definition">
+            <div class="definition-term">Inteligencia Artificial (IA)</div>
+            <p>Sistemas informáticos diseñados para realizar tareas que normalmente requieren inteligencia humana: entender lenguaje, reconocer patrones, tomar decisiones, y aprender de la experiencia.</p>
+        </div>
+
+        <h3>La IA que usamos hoy: LLMs</h3>
+        <p>Cuando usas ChatGPT, Gemini, o Claude, estás interactuando con un tipo específico de IA llamado <strong>Large Language Model (LLM)</strong> o Modelo de Lenguaje Grande.</p>
+
+        <div class="diagram">
+            <div class="diagram-title">📊 Cómo funciona un LLM (simplificado)</div>
+            <pre>
+   TU PREGUNTA                    PROCESAMIENTO                     RESPUESTA
+   ───────────                    ────────────                     ─────────
+       │                               │                               │
+       ▼                               ▼                               ▼
+  ┌─────────┐     ┌─────────────────────────────────┐     ┌─────────────────┐
+  │ "¿Qué   │ ──► │  🧠 Modelo entrenado con        │ ──► │ "El cielo es    │
+  │ color   │     │  billones de textos analiza     │     │ azul debido a   │
+  │ es el   │     │  patrones y probabilidades      │     │ la dispersión   │
+  │ cielo?" │     │  para predecir la respuesta     │     │ de Rayleigh..." │
+  └─────────┘     └─────────────────────────────────┘     └─────────────────┘
+            </pre>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">💡 Dato clave</div>
+            <p>Los LLMs no "piensan" ni "saben" cosas. Predicen la siguiente palabra más probable basándose en patrones estadísticos de billones de textos. Es como un autocompletado muy, muy avanzado.</p>
+        </div>
+    </section>
+
+    <!-- Tipos de IA -->
+    <section id="tipos" class="section">
+        <div class="section-header">
+            <div class="section-icon">📊</div>
+            <h2>Tipos de IA que debes conocer</h2>
+        </div>
+
+        <div class="concepts-grid">
+            <div class="concept-card">
+                <div class="emoji">🤖</div>
+                <h4>IA Generativa</h4>
+                <p>Crea contenido nuevo: texto, imágenes, código, música. Ejemplos: ChatGPT, DALL-E, Midjourney, Gemini.</p>
+            </div>
+            <div class="concept-card">
+                <div class="emoji">👁️</div>
+                <h4>IA de Visión</h4>
+                <p>Analiza y entiende imágenes y videos. Reconoce objetos, caras, texto en fotos (OCR).</p>
+            </div>
+            <div class="concept-card">
+                <div class="emoji">🗣️</div>
+                <h4>IA de Voz</h4>
+                <p>Convierte voz a texto (transcripción) y texto a voz (síntesis). Ejemplos: Whisper, ElevenLabs.</p>
+            </div>
+            <div class="concept-card">
+                <div class="emoji">🔍</div>
+                <h4>IA de Análisis</h4>
+                <p>Procesa datos para encontrar patrones, hacer predicciones o clasificar información.</p>
+            </div>
+        </div>
+
+        <h3>La evolución: De chatbots simples a asistentes inteligentes</h3>
+        <table class="comparison-table">
+            <tr>
+                <th>Era</th>
+                <th>Tecnología</th>
+                <th>Capacidad</th>
+            </tr>
+            <tr>
+                <td><strong>2010s</strong></td>
+                <td>Chatbots con reglas</td>
+                <td>Respuestas predefinidas, muy limitados</td>
+            </tr>
+            <tr>
+                <td><strong>2020</strong></td>
+                <td>GPT-3</td>
+                <td>Texto coherente, pero sin memoria ni razonamiento</td>
+            </tr>
+            <tr>
+                <td><strong>2022-2023</strong></td>
+                <td>ChatGPT, GPT-4</td>
+                <td>Conversación natural, código, análisis básico</td>
+            </tr>
+            <tr>
+                <td><strong>2024-2026</strong></td>
+                <td>GPT-4o, Gemini 3, Claude</td>
+                <td>Razonamiento complejo, multimodal (texto+imagen+audio+video)</td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- ¿Qué es un Prompt? -->
+    <section id="prompt" class="section">
+        <div class="section-header">
+            <div class="section-icon">💬</div>
+            <h2>¿Qué es un Prompt?</h2>
+        </div>
+
+        <div class="definition">
+            <div class="definition-term">Prompt</div>
+            <p>La instrucción, pregunta o texto que le das a una IA para obtener una respuesta. Es tu forma de comunicarte con el modelo. La calidad del prompt determina la calidad de la respuesta.</p>
+        </div>
+
+        <h3>Anatomía de un buen prompt</h3>
+        <div class="diagram">
+            <div class="diagram-title">🔧 Estructura recomendada</div>
+            <pre>
+  ┌────────────────────────────────────────────────────────────────────┐
+  │                                                                    │
+  │  1. ROL         →  "Actúa como un experto en marketing digital"    │
+  │                                                                    │
+  │  2. CONTEXTO    →  "Tengo una tienda de ropa online para jóvenes"  │
+  │                                                                    │
+  │  3. TAREA       →  "Escríbeme 5 ideas de posts para Instagram"     │
+  │                                                                    │
+  │  4. FORMATO     →  "En formato de lista con emojis"                │
+  │                                                                    │
+  │  5. RESTRICCIÓN →  "Máximo 50 palabras por idea"                   │
+  │                                                                    │
+  └────────────────────────────────────────────────────────────────────┘
+            </pre>
+        </div>
+
+        <h3>Ejemplos: Prompt malo vs. Prompt bueno</h3>
+
+        <div class="example-box example-bad">
+            <span class="example-label">❌ MALO</span>
+            <div class="code-block">
+                <span class="string">"Escríbeme algo sobre marketing"</span>
+            </div>
+            <p><strong>Problema:</strong> Muy vago. ¿Qué tipo de marketing? ¿Para quién? ¿Qué formato? ¿Cuánto texto?</p>
+        </div>
+
+        <div class="example-box example-good">
+            <span class="example-label">✅ BUENO</span>
+            <div class="code-block">
+                <span class="string">"Actúa como un consultor de marketing digital con 10 años de experiencia.</span><br><br>
+                <span class="string">Contexto: Tengo una cafetería artesanal en Madrid que quiere aumentar su presencia en redes sociales. Nuestro público son profesionales de 25-40 años que valoran el café de especialidad.</span><br><br>
+                <span class="string">Tarea: Dame una estrategia de contenido para Instagram con:</span><br>
+                <span class="string">- 5 pilares de contenido</span><br>
+                <span class="string">- 3 ideas de posts por cada pilar</span><br>
+                <span class="string">- Frecuencia de publicación recomendada</span><br><br>
+                <span class="string">Formato: Tabla organizada con emojis para cada pilar."</span>
+            </div>
+            <p><strong>Resultado:</strong> Respuesta específica, accionable y exactamente en el formato que necesitas.</p>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">💡 Regla de oro del prompting</div>
+            <p><strong>Sé específico.</strong> La IA no puede leer tu mente. Entre más contexto y detalles des, mejor será la respuesta. Imagina que le explicas a alguien que no conoce nada de tu situación.</p>
+        </div>
+    </section>
+
+    <!-- Conceptos Clave -->
+    <section id="conceptos" class="section">
+        <div class="section-header">
+            <div class="section-icon">🔑</div>
+            <h2>Conceptos Clave que debes dominar</h2>
+        </div>
+
+        <!-- Token -->
+        <div class="definition">
+            <div class="definition-term">🧩 Token</div>
+            <p>La unidad mínima de texto que procesa la IA. Aproximadamente 1 token = 4 caracteres o ¾ de una palabra en inglés. En español puede variar más.</p>
+        </div>
+
+        <div class="example-box">
+            <h4>Ejemplo de tokenización:</h4>
+            <div class="code-block">
+                Texto: <span class="string">"Hola, ¿cómo estás?"</span><br><br>
+                Tokens: [<span class="keyword">"Hola"</span>] [<span class="keyword">","</span>] [<span class="keyword">"¿"</span>] [<span class="keyword">"cómo"</span>] [<span class="keyword">"est"</span>] [<span class="keyword">"ás"</span>] [<span class="keyword">"?"</span>]<br><br>
+                <span class="comment">// Esta frase tiene ~7 tokens</span>
+            </div>
+        </div>
+
+        <p><strong>¿Por qué importa?</strong> Los modelos tienen límites de tokens. GPT-4 puede manejar ~128,000 tokens. Si tu conversación es muy larga, el modelo "olvida" el inicio.</p>
+
+        <!-- Contexto -->
+        <div class="definition">
+            <div class="definition-term">📚 Contexto (Context Window)</div>
+            <p>La "memoria" de la conversación. Todo el texto que el modelo puede "ver" al mismo tiempo: tu historial de chat, documentos adjuntos, instrucciones del sistema, etc.</p>
+        </div>
+
+        <div class="diagram">
+            <div class="diagram-title">📊 Ventanas de contexto por modelo (2026)</div>
+            <pre>
+  Modelo                    Tokens        Equivalente aproximado
+  ────────────────────────────────────────────────────────────────
+  GPT-4o                    128,000       ~300 páginas de texto
+  Claude 3.5 Sonnet         200,000       ~500 páginas de texto
+  Gemini 3 Pro              1,000,000     ~2,500 páginas de texto
+  Gemini 3 Ultra            2,000,000     ~5,000 páginas de texto
+            </pre>
+        </div>
+
+        <!-- Temperatura -->
+        <div class="definition">
+            <div class="definition-term">🌡️ Temperatura</div>
+            <p>Controla cuán "creativo" o "predecible" es el modelo. Valores bajos = respuestas más precisas y consistentes. Valores altos = respuestas más variadas y creativas.</p>
+        </div>
+
+        <div class="scale">
+            <span>🎯 Preciso</span>
+            <div style="flex: 1;">
+                <div class="scale-bar"></div>
+                <div class="scale-labels">
+                    <span>0.0</span>
+                    <span>0.5</span>
+                    <span>1.0</span>
+                    <span>1.5</span>
+                    <span>2.0</span>
+                </div>
+            </div>
+            <span>🎨 Creativo</span>
+        </div>
+
+        <table class="comparison-table">
+            <tr>
+                <th>Temperatura</th>
+                <th>Uso ideal</th>
+            </tr>
+            <tr>
+                <td><strong>0.0 - 0.3</strong></td>
+                <td>Código, datos, respuestas factuales, traducciones</td>
+            </tr>
+            <tr>
+                <td><strong>0.4 - 0.7</strong></td>
+                <td>Escritura general, explicaciones, análisis (balance)</td>
+            </tr>
+            <tr>
+                <td><strong>0.8 - 1.2</strong></td>
+                <td>Escritura creativa, brainstorming, poesía</td>
+            </tr>
+            <tr>
+                <td><strong>1.3+</strong></td>
+                <td>Muy experimental, puede ser incoherente</td>
+            </tr>
+        </table>
+
+        <!-- Alucinación -->
+        <div class="definition">
+            <div class="definition-term">👻 Alucinación</div>
+            <p>Cuando la IA genera información que suena correcta pero es <strong>falsa o inventada</strong>. El modelo "alucina" datos, citas, o hechos que no existen.</p>
+        </div>
+
+        <div class="danger">
+            <div class="tip-title">⚠️ Ejemplo de alucinación</div>
+            <p><strong>Prompt:</strong> "¿Qué dice el estudio de Harvard de 2019 sobre productividad?"</p>
+            <p><strong>Respuesta (alucinada):</strong> "El estudio de Harvard de 2019 dirigido por el Dr. James Miller encontró que..."</p>
+            <p><strong>Realidad:</strong> Ese estudio y ese doctor pueden no existir. La IA inventó detalles convincentes.</p>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">✅ Cómo evitar alucinaciones</div>
+            <ul>
+                <li>Pide siempre <strong>fuentes verificables</strong> con URLs</li>
+                <li>Verifica información crítica en fuentes externas</li>
+                <li>Usa herramientas como <strong>NotebookLM</strong> que citan documentos específicos</li>
+                <li>Di: "Si no estás seguro, dímelo en vez de inventar"</li>
+            </ul>
+        </div>
+
+        <!-- System Prompt -->
+        <div class="definition">
+            <div class="definition-term">⚙️ System Prompt / Instrucción del Sistema</div>
+            <p>Instrucciones que configuran el comportamiento base del modelo ANTES de que el usuario interactúe. Define personalidad, reglas, formato de respuestas, etc.</p>
+        </div>
+
+        <div class="code-block">
+            <span class="comment">// Ejemplo de System Prompt:</span><br><br>
+            <span class="string">"Eres un asistente de atención al cliente para una tienda de tecnología.</span><br>
+            <span class="string">- Siempre saluda amablemente</span><br>
+            <span class="string">- Responde en español de España</span><br>
+            <span class="string">- Si no sabes algo, deriva al humano</span><br>
+            <span class="string">- Nunca des información de precios sin confirmar"</span>
+        </div>
+    </section>
+
+    <!-- Prompting Efectivo -->
+    <section id="prompting" class="section">
+        <div class="section-header">
+            <div class="section-icon">✨</div>
+            <h2>Técnicas de Prompting Efectivo</h2>
+        </div>
+
+        <h3>1. Zero-Shot vs Few-Shot</h3>
+        <div class="concepts-grid">
+            <div class="concept-card">
+                <h4>Zero-Shot (Sin ejemplos)</h4>
+                <p>Le das la instrucción directamente sin mostrar ejemplos. Funciona para tareas simples.</p>
+                <div class="code-block">
+                    <span class="string">"Traduce esto al inglés: Hola mundo"</span>
+                </div>
+            </div>
+            <div class="concept-card">
+                <h4>Few-Shot (Con ejemplos)</h4>
+                <p>Muestras ejemplos del formato/estilo que quieres. Mejor para tareas específicas.</p>
+                <div class="code-block">
+                    <span class="string">"Clasifica el sentimiento:</span><br>
+                    <span class="string">- 'Me encanta!' → Positivo</span><br>
+                    <span class="string">- 'Terrible' → Negativo</span><br>
+                    <span class="string">- 'Está ok' → ?"</span>
+                </div>
+            </div>
+        </div>
+
+        <h3>2. Chain of Thought (Cadena de pensamiento)</h3>
+        <p>Pide al modelo que razone paso a paso antes de dar la respuesta final. Mejora significativamente la precisión en problemas complejos.</p>
+
+        <div class="example-box example-bad">
+            <span class="example-label">❌ SIN Chain of Thought</span>
+            <div class="code-block">
+                <span class="string">"¿Cuántas manzanas tiene Juan si compró 15, dio 3 a María y comió 2?"</span>
+            </div>
+            <p>Respuesta: "10" (puede equivocarse en problemas más complejos)</p>
+        </div>
+
+        <div class="example-box example-good">
+            <span class="example-label">✅ CON Chain of Thought</span>
+            <div class="code-block">
+                <span class="string">"Juan compró 15 manzanas, dio 3 a María y comió 2.</span><br>
+                <span class="string">¿Cuántas manzanas tiene ahora?</span><br><br>
+                <span class="string">Piensa paso a paso antes de responder."</span>
+            </div>
+            <p>Respuesta: "Paso 1: Juan empieza con 15. Paso 2: Da 3 → 15-3=12. Paso 3: Come 2 → 12-2=10. Respuesta: 10 manzanas."</p>
+        </div>
+
+        <h3>3. Role Playing (Asignación de rol)</h3>
+        <p>Asigna una identidad específica al modelo para obtener respuestas desde esa perspectiva.</p>
+
+        <div class="code-block">
+            <span class="comment">// Ejemplos de roles efectivos:</span><br><br>
+            <span class="string">"Eres un abogado especializado en propiedad intelectual..."</span><br>
+            <span class="string">"Actúa como un desarrollador senior de Python con 15 años de experiencia..."</span><br>
+            <span class="string">"Eres un profesor universitario explicando a estudiantes de primer año..."</span><br>
+            <span class="string">"Imagina que eres el CEO de una startup evaluando esta propuesta..."</span>
+        </div>
+
+        <h3>4. Formato estructurado</h3>
+        <p>Especifica exactamente cómo quieres la respuesta.</p>
+
+        <div class="code-block">
+            <span class="string">"Analiza este texto y responde en el siguiente formato:</span><br><br>
+            <span class="string">**Resumen:** (2-3 oraciones)</span><br>
+            <span class="string">**Puntos clave:**</span><br>
+            <span class="string">- Punto 1</span><br>
+            <span class="string">- Punto 2</span><br>
+            <span class="string">**Conclusión:** (1 oración)</span><br>
+            <span class="string">**Nivel de confianza:** Alto/Medio/Bajo"</span>
+        </div>
+
+        <h3>5. Iteración y refinamiento</h3>
+        <p>No esperes perfección en el primer intento. Refina tu prompt basándote en las respuestas.</p>
+
+        <div class="diagram">
+            <div class="diagram-title">🔄 Ciclo de refinamiento</div>
+            <pre>
+    ┌──────────────┐
+    │   PROMPT     │
+    │   inicial    │
+    └──────┬───────┘
+           │
+           ▼
+    ┌──────────────┐
+    │  RESPUESTA   │ ◄── ¿Es lo que necesitas?
+    │   del modelo │
+    └──────┬───────┘
+           │
+     ┌─────┴─────┐
+     │           │
+    SÍ          NO
+     │           │
+     ▼           ▼
+  ✅ Listo    Ajusta el prompt:
+              - Más contexto
+              - Más específico
+              - Ejemplos
+              - Diferente formato
+              └──────► Repite
+            </pre>
+        </div>
+    </section>
+
+    <!-- Limitaciones -->
+    <section id="limitaciones" class="section">
+        <div class="section-header">
+            <div class="section-icon">⚠️</div>
+            <h2>Limitaciones y Consideraciones Éticas</h2>
+        </div>
+
+        <h3>Lo que la IA NO puede hacer (bien)</h3>
+
+        <div class="concepts-grid">
+            <div class="concept-card">
+                <div class="emoji">📅</div>
+                <h4>Información en tiempo real</h4>
+                <p>Los modelos tienen un "corte de conocimiento". No saben qué pasó ayer a menos que tengan acceso a internet.</p>
+            </div>
+            <div class="concept-card">
+                <div class="emoji">🔢</div>
+                <h4>Matemáticas complejas</h4>
+                <p>Pueden equivocarse en cálculos. Siempre verifica números importantes con calculadora.</p>
+            </div>
+            <div class="concept-card">
+                <div class="emoji">🔮</div>
+                <h4>Predecir el futuro</h4>
+                <p>No pueden saber qué pasará. Sus "predicciones" son solo patrones del pasado.</p>
+            </div>
+            <div class="concept-card">
+                <div class="emoji">❤️</div>
+                <h4>Emociones genuinas</h4>
+                <p>Simulan empatía, pero no sienten. No son terapeutas ni reemplazos de conexión humana.</p>
+            </div>
+        </div>
+
+        <h3>Consideraciones éticas importantes</h3>
+
+        <div class="warning">
+            <div class="tip-title">⚖️ Sesgos en los datos</div>
+            <p>Los modelos aprenden de internet, que contiene sesgos de género, raza, cultura, etc. Las respuestas pueden reflejar estos sesgos. Siempre cuestiona y verifica.</p>
+        </div>
+
+        <div class="warning">
+            <div class="tip-title">🔒 Privacidad</div>
+            <p>No compartas información sensible (contraseñas, datos médicos, información confidencial de trabajo) con IA públicas. Pueden ser almacenadas o usadas para entrenamiento.</p>
+        </div>
+
+        <div class="warning">
+            <div class="tip-title">📝 Propiedad intelectual</div>
+            <p>El contenido generado por IA tiene zonas grises legales. No asumas que puedes usarlo comercialmente sin verificar.</p>
+        </div>
+
+        <div class="warning">
+            <div class="tip-title">🎓 Integridad académica</div>
+            <p>Usar IA para hacer tareas sin declararlo puede ser considerado plagio en muchas instituciones. Conoce las políticas de tu escuela/trabajo.</p>
+        </div>
+
+        <h3>Regla de oro</h3>
+        <div class="tip">
+            <div class="tip-title">🎯 La IA es una herramienta, no un reemplazo</div>
+            <p>Usa la IA para <strong>potenciar</strong> tu trabajo, no para reemplazar tu pensamiento crítico. Siempre revisa, verifica y añade tu juicio humano. La responsabilidad final es tuya.</p>
+        </div>
+    </section>
+
+    <!-- Ejercicios -->
+    <section id="ejercicios" class="section">
+        <div class="section-header">
+            <div class="section-icon">🎯</div>
+            <h2>Ejercicios Prácticos</h2>
+        </div>
+
+        <div class="ejercicio">
+            <h4>🎯 Ejercicio 1: Mejora este prompt</h4>
+            <p>Prompt original: <em>"Escríbeme un email"</em></p>
+            <ol>
+                <li>Identifica qué falta (contexto, destinatario, tono, propósito)</li>
+                <li>Reescríbelo usando la estructura ROL + CONTEXTO + TAREA + FORMATO</li>
+                <li>Prueba ambas versiones en cualquier IA y compara resultados</li>
+            </ol>
+        </div>
+
+        <div class="ejercicio">
+            <h4>🎯 Ejercicio 2: Detecta la alucinación</h4>
+            <ol>
+                <li>Pregunta a una IA: "¿Quién escribió el libro 'La sombra del viento digital' publicado en 2021?"</li>
+                <li>Observa si inventa autor, editorial, sinopsis...</li>
+                <li>Verifica la información en Google o Amazon</li>
+                <li>Reflexiona: ¿Cómo podrías haber evitado aceptar información falsa?</li>
+            </ol>
+        </div>
+
+        <div class="ejercicio">
+            <h4>🎯 Ejercicio 3: Chain of Thought</h4>
+            <p>Usa este problema y prueba con/sin "piensa paso a paso":</p>
+            <ol>
+                <li>Una tienda tiene 247 productos. Llegan 3 cajas con 48 productos cada una. Se venden 89 productos. ¿Cuántos quedan?</li>
+                <li>Primero pregunta sin indicar razonamiento</li>
+                <li>Luego añade "Explica tu razonamiento paso a paso"</li>
+                <li>Compara: ¿Cuál respuesta es más confiable?</li>
+            </ol>
+        </div>
+
+        <div class="ejercicio">
+            <h4>🎯 Ejercicio 4: Role Playing comparativo</h4>
+            <p>Usa el mismo tema con diferentes roles:</p>
+            <ol>
+                <li>Pide explicar "blockchain" como si fueras:
+                    <ul>
+                        <li>Un profesor de primaria</li>
+                        <li>Un experto técnico</li>
+                        <li>Un comediante</li>
+                    </ul>
+                </li>
+                <li>Observa cómo cambia el lenguaje, ejemplos y profundidad</li>
+                <li>Reflexiona: ¿Cuál usarías para tu audiencia específica?</li>
+            </ol>
+        </div>
+
+        <div class="ejercicio">
+            <h4>🎯 Ejercicio 5: Crea tu prompt perfecto</h4>
+            <p>Piensa en una tarea real que necesites hacer (email, presentación, análisis, código, etc.)</p>
+            <ol>
+                <li>Escribe un primer borrador del prompt</li>
+                <li>Revisa: ¿Tiene ROL? ¿CONTEXTO? ¿TAREA clara? ¿FORMATO?</li>
+                <li>Añade restricciones si es necesario (longitud, estilo, lo que NO quieres)</li>
+                <li>Pruébalo y refina según la respuesta</li>
+                <li>Guarda tu prompt final para reusar</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- Resumen -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">📋</div>
+            <h2>Resumen: Lo que aprendiste</h2>
+        </div>
+
+        <div class="concepts-grid">
+            <div class="concept-card">
+                <h4>✅ IA y LLMs</h4>
+                <p>Los modelos predicen texto basándose en patrones, no "piensan" realmente.</p>
+            </div>
+            <div class="concept-card">
+                <h4>✅ Prompts</h4>
+                <p>La calidad del prompt = calidad de respuesta. Usa: ROL + CONTEXTO + TAREA + FORMATO.</p>
+            </div>
+            <div class="concept-card">
+                <h4>✅ Tokens y contexto</h4>
+                <p>Los modelos tienen límites de memoria. Conversaciones muy largas pierden contexto.</p>
+            </div>
+            <div class="concept-card">
+                <h4>✅ Temperatura</h4>
+                <p>Baja = preciso, Alta = creativo. Ajusta según tu necesidad.</p>
+            </div>
+            <div class="concept-card">
+                <h4>✅ Alucinaciones</h4>
+                <p>La IA puede inventar información. Siempre verifica datos importantes.</p>
+            </div>
+            <div class="concept-card">
+                <h4>✅ Técnicas de prompting</h4>
+                <p>Few-shot, Chain of Thought, Role Playing mejoran significativamente los resultados.</p>
+            </div>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">📌 Próxima clase</div>
+            <p>Ahora que conoces los fundamentos, en la <strong>Clase 1</strong> aprenderás a usar <strong>Google Gemini</strong> y <strong>NotebookLM</strong> con estas técnicas.</p>
+        </div>
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>📚 Clase 0: Fundamentos de IA | Curso de Gilberto</p>
+    <p>Material creado por <strong>SOUL CORE</strong> — 2026</p>
+</footer>
+
+</body>
+</html>
