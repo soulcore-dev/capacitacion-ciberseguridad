@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practica 2: Resolucion de Problemas con IA | Curso de Hilberto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4285f4;
+            --primary-dark: #1a73e8;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e1e2e;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --border: #e2e8f0;
+            --gemini: linear-gradient(135deg, #4285f4, #9b72cb, #d96570);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.7;
+        }
+
+        .hero {
+            background: var(--gemini);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        .hero .subtitle { font-size: 1.2rem; opacity: 0.95; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .section-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            background: var(--gemini);
+        }
+
+        h2 { font-size: 1.6rem; font-weight: 600; }
+        h3 { font-size: 1.2rem; font-weight: 600; margin: 25px 0 12px; color: var(--dark); }
+        h4 { font-size: 1rem; font-weight: 600; margin: 15px 0 8px; color: var(--gray); }
+        p { color: var(--gray); margin-bottom: 12px; }
+
+        .objetivo {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .objetivo-title {
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .tip {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border-left: 4px solid var(--secondary);
+            padding: 18px;
+            border-radius: 0 12px 12px 0;
+            margin: 18px 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: #059669;
+            margin-bottom: 6px;
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-left: 4px solid var(--accent);
+            padding: 18px;
+            border-radius: 0 12px 12px 0;
+            margin: 18px 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: #d97706;
+            margin-bottom: 6px;
+        }
+
+        .ejercicio-box {
+            background: linear-gradient(135deg, #fae8ff, #e9d5ff);
+            border: 2px solid #a855f7;
+            border-radius: 14px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .ejercicio-box h4 {
+            color: #7c3aed;
+            font-size: 1.15rem;
+            margin: 0 0 15px;
+        }
+
+        .ejercicio-box ol, .ejercicio-box ul {
+            margin-left: 20px;
+            color: var(--dark);
+        }
+
+        .ejercicio-box li { margin-bottom: 10px; }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin: 12px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .bad-example {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            border: 2px dashed var(--danger);
+            border-radius: 12px;
+            padding: 18px;
+            margin: 15px 0;
+        }
+
+        .bad-example .label {
+            background: var(--danger);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .good-example {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+            padding: 18px;
+            margin: 15px 0;
+        }
+
+        .good-example .label {
+            background: var(--secondary);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .concepto-box {
+            background: var(--light);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .concepto-box h4 {
+            color: var(--primary-dark);
+            margin: 0 0 10px;
+        }
+
+        .checklist {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 18px;
+            margin: 15px 0;
+        }
+
+        .checklist label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .checklist input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--secondary);
+        }
+
+        .entrega {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid var(--accent);
+            border-radius: 14px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .entrega h4 {
+            color: #d97706;
+            margin: 0 0 12px;
+        }
+
+        .diagram {
+            background: var(--dark);
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: auto;
+        }
+
+        .diagram-title {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--dark);
+            color: white;
+        }
+
+        .footer p { color: rgba(255,255,255,0.7); }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .section { padding: 22px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="hero">
+    <h1>Practica 2: Resolucion de Problemas</h1>
+    <p class="subtitle">Aprende a usar Gemini para pensar paso a paso</p>
+    <span class="badge">Duracion: 30-45 minutos | Nivel: Intermedio</span>
+</header>
+
+<main class="container">
+
+    <!-- OBJETIVO -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">🎯</div>
+            <h2>Objetivo de la Practica</h2>
+        </div>
+
+        <div class="objetivo">
+            <div class="objetivo-title">Al completar esta practica podras:</div>
+            <ul>
+                <li>Usar la tecnica "Chain of Thought" para problemas complejos</li>
+                <li>Detectar cuando Gemini puede estar inventando informacion (alucinaciones)</li>
+                <li>Verificar respuestas y pedir fuentes</li>
+                <li>Resolver problemas reales usando razonamiento paso a paso</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">Prerequisito</div>
+            <p>Debes haber completado la <strong>Practica 1: Domina los Prompts</strong> antes de hacer esta practica.</p>
+        </div>
+    </section>
+
+    <!-- PARTE 1: CHAIN OF THOUGHT -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">🧠</div>
+            <h2>Parte 1: Chain of Thought (Cadena de Pensamiento)</h2>
+        </div>
+
+        <div class="concepto-box">
+            <h4>Que es Chain of Thought?</h4>
+            <p>Es una tecnica donde le pides a la IA que <strong>piense paso a paso</strong> antes de dar la respuesta final. Esto mejora MUCHO la precision en problemas de logica, matematicas o decisiones complejas.</p>
+        </div>
+
+        <h3>Por que funciona?</h3>
+        <p>Cuando le pides a Gemini que "piense paso a paso", lo obligas a:</p>
+        <ul>
+            <li>Descomponer el problema en partes</li>
+            <li>Mostrar su razonamiento (puedes verificarlo)</li>
+            <li>Detectar errores antes de la respuesta final</li>
+        </ul>
+
+        <div class="diagram">
+            <div class="diagram-title">Como funciona Chain of Thought:</div>
+            <pre>
+  SIN Chain of Thought:          CON Chain of Thought:
+  ─────────────────────          ─────────────────────
+
+  Problema ──► Respuesta         Problema
+       (salto directo)                │
+                                      ▼
+                                 Paso 1: Identificar datos
+                                      │
+                                      ▼
+                                 Paso 2: Analizar relaciones
+                                      │
+                                      ▼
+                                 Paso 3: Calcular/Razonar
+                                      │
+                                      ▼
+                                 Respuesta VERIFICABLE
+            </pre>
+        </div>
+
+        <h3>Ejemplo practico:</h3>
+
+        <div class="bad-example">
+            <span class="label">SIN Chain of Thought</span>
+            <div class="code-block">"Una tienda tiene 247 productos. Llegan 3 cajas con 48 productos cada una. Se venden 89 productos. Cuantos quedan?"</div>
+            <p><strong>Respuesta tipica:</strong> "302 productos" (puede equivocarse sin mostrar como llego ahi)</p>
+        </div>
+
+        <div class="good-example">
+            <span class="label">CON Chain of Thought</span>
+            <div class="code-block">"Una tienda tiene 247 productos. Llegan 3 cajas con 48 productos cada una. Se venden 89 productos. Cuantos quedan?
+
+Piensa paso a paso antes de dar la respuesta final."</div>
+            <p><strong>Respuesta:</strong></p>
+            <div class="code-block">Paso 1: Productos iniciales = 247
+Paso 2: Productos que llegan = 3 cajas × 48 = 144
+Paso 3: Total despues de llegada = 247 + 144 = 391
+Paso 4: Productos vendidos = 89
+Paso 5: Total final = 391 - 89 = 302
+
+Respuesta: Quedan 302 productos.</div>
+            <p><strong>Ventaja:</strong> Puedes verificar cada paso y detectar errores facilmente.</p>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">Frases magicas para activar Chain of Thought:</div>
+            <ul>
+                <li>"Piensa paso a paso antes de responder"</li>
+                <li>"Explica tu razonamiento"</li>
+                <li>"Muestra como llegaste a esa conclusion"</li>
+                <li>"Desglosa el problema en pasos"</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- PARTE 2: ALUCINACIONES -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">👻</div>
+            <h2>Parte 2: Detectar Alucinaciones</h2>
+        </div>
+
+        <div class="concepto-box">
+            <h4>Que es una alucinacion?</h4>
+            <p>Es cuando la IA genera informacion que <strong>suena correcta pero es FALSA o inventada</strong>. El modelo "alucina" datos, citas, nombres o hechos que no existen.</p>
+        </div>
+
+        <div class="warning">
+            <div class="warning-title">Ejemplo de alucinacion:</div>
+            <p><strong>Prompt:</strong> "Quien escribio el libro 'La sombra del viento digital' publicado en 2021?"</p>
+            <p><strong>Respuesta (alucinada):</strong> "El libro fue escrito por el autor espaniol Miguel Ruiz Zafon Jr., publicado por Editorial Planeta..."</p>
+            <p><strong>Realidad:</strong> Ese libro NO existe. La IA invento titulo, autor y editorial.</p>
+        </div>
+
+        <h3>Como evitar alucinaciones:</h3>
+
+        <div class="tip">
+            <div class="tip-title">Estrategias de verificacion:</div>
+            <ol>
+                <li><strong>Pide fuentes:</strong> "Dame la fuente de esa informacion con URL"</li>
+                <li><strong>Se esceptico:</strong> Si suena muy especifico (nombres, fechas, citas), verifica</li>
+                <li><strong>Usa Google:</strong> Busca los datos que te da la IA</li>
+                <li><strong>Pide honestidad:</strong> "Si no estas seguro, dime 'no estoy seguro' en vez de inventar"</li>
+            </ol>
+        </div>
+
+        <div class="code-block">Prompt para evitar alucinaciones:
+
+"Responde mi pregunta. Si no estas 100% seguro de algo,
+dime 'No tengo certeza sobre esto' en vez de inventar datos.
+
+Si citas algun estudio o fuente, dame el enlace para verificar.
+
+Pregunta: [tu pregunta aqui]"</div>
+    </section>
+
+    <!-- PARTE 3: EJERCICIOS -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">✏️</div>
+            <h2>Parte 3: Ejercicios Practicos</h2>
+        </div>
+
+        <div class="ejercicio-box">
+            <h4>Ejercicio 1: Chain of Thought en accion</h4>
+            <p>Abre <a href="https://gemini.google.com" target="_blank">gemini.google.com</a> y prueba este problema:</p>
+
+            <h4>Paso 1 - Primero SIN Chain of Thought:</h4>
+            <div class="code-block">"Maria tiene el doble de edad que Juan. En 5 anios, la suma de sus edades sera 40. Que edad tiene cada uno ahora?"</div>
+            <p>Anota la respuesta.</p>
+
+            <h4>Paso 2 - Ahora CON Chain of Thought:</h4>
+            <div class="code-block">"Maria tiene el doble de edad que Juan. En 5 anios, la suma de sus edades sera 40. Que edad tiene cada uno ahora?
+
+Piensa paso a paso. Define variables, plantea las ecuaciones, y resuelvelas mostrando cada paso."</div>
+
+            <h4>Paso 3 - Verifica:</h4>
+            <div class="checklist">
+                <label><input type="checkbox"> Gemini mostro el razonamiento paso a paso</label>
+                <label><input type="checkbox"> Puedo seguir la logica y verificar cada paso</label>
+                <label><input type="checkbox"> La respuesta final es: Juan = 10, Maria = 20</label>
+            </div>
+        </div>
+
+        <div class="ejercicio-box">
+            <h4>Ejercicio 2: Detecta la alucinacion</h4>
+            <p>Prueba este prompt en Gemini:</p>
+
+            <div class="code-block">"Cuentame sobre el estudio de la Universidad de Stanford de 2019 sobre los efectos del cafe en la productividad laboral."</div>
+
+            <h4>Ahora investiga:</h4>
+            <ol>
+                <li>Copia el nombre exacto del estudio que te dio Gemini</li>
+                <li>Busca ese estudio en Google</li>
+                <li>Busca el nombre del investigador que menciono</li>
+            </ol>
+
+            <div class="checklist">
+                <label><input type="checkbox"> El estudio existe realmente?</label>
+                <label><input type="checkbox"> El investigador existe?</label>
+                <label><input type="checkbox"> Los datos que dio son verificables?</label>
+            </div>
+
+            <div class="warning">
+                <div class="warning-title">Leccion:</div>
+                <p>Si no encontraste el estudio, Gemini ALUCINO. Invento datos convincentes sobre algo que no existe. Por eso SIEMPRE debes verificar informacion importante.</p>
+            </div>
+        </div>
+
+        <div class="ejercicio-box">
+            <h4>Ejercicio 3: Resuelve un problema real</h4>
+            <p>Usa Gemini para resolver este problema practico con Chain of Thought:</p>
+
+            <div class="code-block">"Tengo un presupuesto de $500 para armar una PC para programar. Necesito: procesador, RAM, almacenamiento, y placa madre.
+
+Piensa paso a paso:
+1. Define que especificaciones minimas necesito para programar
+2. Investiga precios aproximados de cada componente
+3. Propone una configuracion que quepa en mi presupuesto
+4. Explica por que elegiste cada componente
+
+Si no estas seguro de un precio, dilo claramente."</div>
+
+            <h4>Evalua la respuesta:</h4>
+            <div class="checklist">
+                <label><input type="checkbox"> Gemini explico el razonamiento paso a paso</label>
+                <label><input type="checkbox"> Menciono cuando no estaba seguro de algo</label>
+                <label><input type="checkbox"> La suma de los componentes esta cerca del presupuesto</label>
+                <label><input type="checkbox"> Las recomendaciones tienen sentido para programacion</label>
+            </div>
+        </div>
+    </section>
+
+    <!-- ENTREGA -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">📤</div>
+            <h2>Entrega de la Practica</h2>
+        </div>
+
+        <div class="entrega">
+            <h4>Para completar esta practica debes entregar:</h4>
+            <ol>
+                <li><strong>Screenshot del Ejercicio 1:</strong> Mostrando la respuesta CON Chain of Thought (donde Gemini muestra los pasos)</li>
+                <li><strong>Ejercicio 2 - Reporte de alucinacion:</strong>
+                    <ul>
+                        <li>Que informacion te dio Gemini sobre el estudio?</li>
+                        <li>Pudiste verificarlo en Google? (si/no)</li>
+                        <li>Fue una alucinacion? Explica como lo descubriste</li>
+                    </ul>
+                </li>
+                <li><strong>Screenshot del Ejercicio 3:</strong> Mostrando la respuesta de Gemini al problema de la PC</li>
+                <li><strong>Reflexion:</strong> En 2-3 oraciones, explica por que Chain of Thought es util y por que no debes confiar ciegamente en la IA.</li>
+            </ol>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">Criterios de evaluacion:</div>
+            <ul>
+                <li>Usaste correctamente "piensa paso a paso" en los prompts</li>
+                <li>Identificaste correctamente si hubo alucinacion</li>
+                <li>La reflexion demuestra comprension de las limitaciones de la IA</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- RESUMEN -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">📋</div>
+            <h2>Resumen: Lo que aprendiste</h2>
+        </div>
+
+        <div class="checklist">
+            <label><input type="checkbox"> Chain of Thought mejora la precision en problemas complejos</label>
+            <label><input type="checkbox"> "Piensa paso a paso" es la frase clave</label>
+            <label><input type="checkbox"> Las alucinaciones son respuestas falsas que suenan reales</label>
+            <label><input type="checkbox"> SIEMPRE debo verificar informacion importante</label>
+            <label><input type="checkbox"> Puedo pedirle a la IA que admita cuando no esta segura</label>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">Siguiente paso</div>
+            <p>Ahora estas listo para el <strong>Quiz de Evaluacion</strong> donde pondras a prueba todo lo aprendido sobre IA y Gemini.</p>
+        </div>
+    </section>
+
+</main>
+
+<footer class="footer">
+    <p>Practica 2: Resolucion de Problemas con IA | Curso de Hilberto</p>
+    <p>Material creado por <strong>SOUL CORE</strong> — 2026</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practica 1: Domina los Prompts | Curso de Hilberto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e1e2e;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.7;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        .hero .subtitle { font-size: 1.2rem; opacity: 0.95; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .section-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        h2 { font-size: 1.6rem; font-weight: 600; }
+        h3 { font-size: 1.2rem; font-weight: 600; margin: 25px 0 12px; color: var(--dark); }
+        h4 { font-size: 1rem; font-weight: 600; margin: 15px 0 8px; color: var(--gray); }
+        p { color: var(--gray); margin-bottom: 12px; }
+
+        .objetivo {
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .objetivo-title {
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .tip {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border-left: 4px solid var(--secondary);
+            padding: 18px;
+            border-radius: 0 12px 12px 0;
+            margin: 18px 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: #059669;
+            margin-bottom: 6px;
+        }
+
+        .ejercicio-box {
+            background: linear-gradient(135deg, #fae8ff, #e9d5ff);
+            border: 2px solid #a855f7;
+            border-radius: 14px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .ejercicio-box h4 {
+            color: #7c3aed;
+            font-size: 1.15rem;
+            margin: 0 0 15px;
+        }
+
+        .ejercicio-box ol, .ejercicio-box ul {
+            margin-left: 20px;
+            color: var(--dark);
+        }
+
+        .ejercicio-box li { margin-bottom: 10px; }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin: 12px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .bad-example {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            border: 2px dashed var(--danger);
+            border-radius: 12px;
+            padding: 18px;
+            margin: 15px 0;
+        }
+
+        .bad-example .label {
+            background: var(--danger);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .good-example {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+            padding: 18px;
+            margin: 15px 0;
+        }
+
+        .good-example .label {
+            background: var(--secondary);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .checklist {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 18px;
+            margin: 15px 0;
+        }
+
+        .checklist label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .checklist input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--secondary);
+        }
+
+        .entrega {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid var(--accent);
+            border-radius: 14px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .entrega h4 {
+            color: #d97706;
+            margin: 0 0 12px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--dark);
+            color: white;
+        }
+
+        .footer p { color: rgba(255,255,255,0.7); }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .section { padding: 22px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="hero">
+    <h1>Practica 1: Domina los Prompts</h1>
+    <p class="subtitle">Aprende a comunicarte efectivamente con la IA</p>
+    <span class="badge">Duracion: 30-45 minutos | Nivel: Basico</span>
+</header>
+
+<main class="container">
+
+    <!-- OBJETIVO -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">🎯</div>
+            <h2>Objetivo de la Practica</h2>
+        </div>
+
+        <div class="objetivo">
+            <div class="objetivo-title">Al completar esta practica podras:</div>
+            <ul>
+                <li>Identificar las 4 partes de un prompt efectivo</li>
+                <li>Transformar prompts vagos en prompts especificos</li>
+                <li>Usar Gemini para obtener respuestas utiles y accionables</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">Recuerda</div>
+            <p>La calidad del prompt determina la calidad de la respuesta. Un prompt vago = respuesta generica. Un prompt especifico = respuesta util.</p>
+        </div>
+    </section>
+
+    <!-- PARTE 1: TEORIA RAPIDA -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">📚</div>
+            <h2>Parte 1: La Formula del Prompt Perfecto</h2>
+        </div>
+
+        <p>Todo buen prompt tiene 4 componentes. Memoriza esta formula:</p>
+
+        <div class="code-block">
+ROL       + CONTEXTO    + TAREA         + FORMATO
+(Quien)   + (Situacion) + (Que quiero)  + (Como lo quiero)
+        </div>
+
+        <h3>Ejemplo practico:</h3>
+
+        <div class="bad-example">
+            <span class="label">MAL</span>
+            <div class="code-block">"Escribeme sobre marketing"</div>
+            <p><strong>Problema:</strong> No tiene ROL, ni CONTEXTO, ni FORMATO. La IA no sabe que tipo de marketing, para quien, ni como presentarlo.</p>
+        </div>
+
+        <div class="good-example">
+            <span class="label">BIEN</span>
+            <div class="code-block">"Actua como un consultor de marketing digital con 10 anios de experiencia. [ROL]
+
+Contexto: Tengo una cafeteria artesanal que quiere atraer mas clientes jovenes (18-30 anios). [CONTEXTO]
+
+Tarea: Dame 5 ideas de contenido para TikTok. [TAREA]
+
+Formato: Lista numerada, cada idea con titulo + descripcion de 2 lineas." [FORMATO]</div>
+            <p><strong>Resultado:</strong> Respuesta especifica, util y lista para usar.</p>
+        </div>
+    </section>
+
+    <!-- PARTE 2: EJERCICIOS -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">✏️</div>
+            <h2>Parte 2: Ejercicios Practicos</h2>
+        </div>
+
+        <div class="ejercicio-box">
+            <h4>Ejercicio 1: Transforma el prompt malo</h4>
+            <p>Abre <a href="https://gemini.google.com" target="_blank">gemini.google.com</a> y prueba estos dos prompts:</p>
+
+            <h4>Paso 1 - Prueba el prompt malo:</h4>
+            <div class="code-block">"Escribeme un email"</div>
+            <p>Observa la respuesta. Es generica y no te sirve directamente.</p>
+
+            <h4>Paso 2 - Ahora prueba este prompt mejorado:</h4>
+            <div class="code-block">"Actua como un profesional de recursos humanos.
+
+Contexto: Necesito enviar un email a un candidato que entrevistamos ayer. El candidato se llama Carlos Mendez, aplico para el puesto de Analista de Datos. Nos gusto su perfil pero queremos hacerle una segunda entrevista.
+
+Tarea: Escribe un email profesional pero amigable invitandolo a una segunda entrevista el proximo martes a las 10 AM.
+
+Formato: Email corto (maximo 150 palabras), con saludo, cuerpo y despedida."</div>
+
+            <h4>Paso 3 - Compara:</h4>
+            <div class="checklist">
+                <label><input type="checkbox"> La segunda respuesta es mas especifica</label>
+                <label><input type="checkbox"> La segunda respuesta es usable directamente</label>
+                <label><input type="checkbox"> Entiendo por que el contexto importa</label>
+            </div>
+        </div>
+
+        <div class="ejercicio-box">
+            <h4>Ejercicio 2: Crea tu propio prompt</h4>
+            <p>Piensa en algo que necesites para tu vida real (un email, una explicacion, una lista de tareas, etc.)</p>
+
+            <ol>
+                <li><strong>Escribe primero un prompt "malo"</strong> (vago, sin detalles)</li>
+                <li><strong>Pruebalo en Gemini</strong> y observa la respuesta</li>
+                <li><strong>Ahora mejoralo</strong> usando la formula ROL + CONTEXTO + TAREA + FORMATO</li>
+                <li><strong>Prueba el prompt mejorado</strong> y compara</li>
+            </ol>
+
+            <div class="tip">
+                <div class="tip-title">Ideas si no se te ocurre nada:</div>
+                <ul>
+                    <li>Email para pedir un aumento o permiso</li>
+                    <li>Explicacion de un concepto que no entiendas</li>
+                    <li>Plan de estudio para aprender algo nuevo</li>
+                    <li>Lista de compras para una receta especifica</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="ejercicio-box">
+            <h4>Ejercicio 3: Identifica las partes</h4>
+            <p>Lee este prompt y marca que partes tiene:</p>
+
+            <div class="code-block">"Eres un chef profesional especializado en cocina mediterranea. Tengo invitados este sabado y uno de ellos es vegetariano. Necesito un menu de 3 tiempos (entrada, plato fuerte, postre) que sea vegetariano pero que tambien le guste a los que comen carne. Dame las recetas en formato de lista con ingredientes y pasos numerados."</div>
+
+            <div class="checklist">
+                <label><input type="checkbox"> Tiene ROL ("Eres un chef profesional...")</label>
+                <label><input type="checkbox"> Tiene CONTEXTO ("Tengo invitados... uno vegetariano...")</label>
+                <label><input type="checkbox"> Tiene TAREA ("Necesito un menu de 3 tiempos...")</label>
+                <label><input type="checkbox"> Tiene FORMATO ("lista con ingredientes y pasos numerados")</label>
+            </div>
+        </div>
+    </section>
+
+    <!-- ENTREGA -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">📤</div>
+            <h2>Entrega de la Practica</h2>
+        </div>
+
+        <div class="entrega">
+            <h4>Para completar esta practica debes entregar:</h4>
+            <ol>
+                <li><strong>Screenshot del Ejercicio 1:</strong> Mostrando ambas respuestas de Gemini (prompt malo vs prompt bueno)</li>
+                <li><strong>Tu prompt personalizado (Ejercicio 2):</strong>
+                    <ul>
+                        <li>El prompt "malo" original</li>
+                        <li>El prompt "bueno" mejorado</li>
+                        <li>Screenshot de la respuesta de Gemini al prompt mejorado</li>
+                    </ul>
+                </li>
+                <li><strong>Respuesta escrita:</strong> Explica en 2-3 oraciones por que la formula ROL + CONTEXTO + TAREA + FORMATO funciona mejor que un prompt vago.</li>
+            </ol>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">Criterios de evaluacion:</div>
+            <ul>
+                <li>El prompt mejorado debe tener las 4 partes de la formula</li>
+                <li>La respuesta de Gemini debe ser notablemente mejor que con el prompt malo</li>
+                <li>La explicacion demuestra comprension del concepto</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- RESUMEN -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">📋</div>
+            <h2>Resumen: Lo que aprendiste</h2>
+        </div>
+
+        <div class="checklist">
+            <label><input type="checkbox"> La formula del prompt perfecto: ROL + CONTEXTO + TAREA + FORMATO</label>
+            <label><input type="checkbox"> Un prompt vago genera respuestas genericas</label>
+            <label><input type="checkbox"> Un prompt especifico genera respuestas utiles</label>
+            <label><input type="checkbox"> Siempre puedo mejorar un prompt agregando mas contexto</label>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">Siguiente practica</div>
+            <p>En la <strong>Practica 2</strong> aprenderas a usar Gemini para resolver problemas paso a paso usando la tecnica "Chain of Thought".</p>
+        </div>
+    </section>
+
+</main>
+
+<footer class="footer">
+    <p>Practica 1: Domina los Prompts | Curso de Hilberto</p>
+    <p>Material creado por <strong>SOUL CORE</strong> — 2026</p>
+</footer>
+
+</body>
+</html>
