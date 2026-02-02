@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practica 3: Gems, Canvas y Deep Research | Capacitacion Ciberseguridad + IA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #9b72cb;
+            --primary-dark: #7c4dff;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --dark: #f1f5f9;
+            --light: #000000;
+            --gray: #94a3b8;
+            --border: #1a1a1a;
+            --card-bg: #0a0a0a;
+            --gemini: linear-gradient(135deg, #9b72cb, #d96570, #4285f4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.7;
+        }
+
+        .hero {
+            background: var(--gemini);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        .hero .subtitle { font-size: 1.2rem; opacity: 0.95; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+        .section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #111111;
+        }
+
+        .section-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            background: var(--gemini);
+        }
+
+        h2 { font-size: 1.6rem; font-weight: 600; }
+        h3 { font-size: 1.2rem; font-weight: 600; margin: 25px 0 12px; color: var(--dark); }
+        h4 { font-size: 1rem; font-weight: 600; margin: 15px 0 8px; color: var(--gray); }
+        p { color: var(--gray); margin-bottom: 12px; }
+
+        .objetivo {
+            background: rgba(155, 114, 203, 0.15);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .objetivo-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .tip {
+            background: rgba(16, 185, 129, 0.15);
+            border-left: 4px solid var(--secondary);
+            padding: 18px;
+            border-radius: 0 12px 12px 0;
+            margin: 18px 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 6px;
+        }
+
+        .warning {
+            background: rgba(245, 158, 11, 0.15);
+            border-left: 4px solid var(--accent);
+            padding: 18px;
+            border-radius: 0 12px 12px 0;
+            margin: 18px 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .ejercicio-box {
+            background: rgba(233, 30, 99, 0.15);
+            border: 2px solid #e91e63;
+            border-radius: 14px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .ejercicio-box h4 {
+            color: #f48fb1;
+            font-size: 1.15rem;
+            margin: 0 0 15px;
+        }
+
+        .ejercicio-box ol, .ejercicio-box ul {
+            margin-left: 20px;
+            color: var(--dark);
+        }
+
+        .ejercicio-box li { margin-bottom: 10px; }
+
+        .code-block {
+            background: #111111;
+            color: #e2e8f0;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin: 12px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            border: 1px solid #1a1a1a;
+        }
+
+        .escenario {
+            background: rgba(66, 133, 244, 0.15);
+            border: 2px solid #4285f4;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .escenario-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .escenario-header h4 {
+            color: #8ab4f8;
+            margin: 0;
+        }
+
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #111111;
+            border-radius: 10px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            margin: 0 0 5px;
+            color: var(--dark);
+        }
+
+        .step-content p { margin: 0; font-size: 0.95rem; }
+
+        ul, ol { margin-left: 20px; margin-bottom: 15px; }
+        li { margin-bottom: 8px; color: var(--gray); }
+
+        .entregable {
+            background: rgba(16, 185, 129, 0.2);
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .entregable h4 {
+            color: var(--secondary);
+            margin-top: 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: #0a0a0a;
+            color: white;
+        }
+
+        .footer p { color: rgba(255,255,255,0.7); }
+        .footer a { color: var(--primary); }
+        .signature { font-size: 1.3rem; margin-bottom: 10px; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .section { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="hero">
+    <h1>Practica 3: Gems, Canvas y Deep Research</h1>
+    <p class="subtitle">Crea asistentes personalizados y domina la investigacion con IA</p>
+    <span class="badge">Nivel Avanzado | 45-60 min</span>
+</header>
+
+<main class="container">
+
+    <!-- INTRODUCCION -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">🎯</div>
+            <h2>Introduccion</h2>
+        </div>
+
+        <p>En esta practica aplicaras tres de las funciones mas poderosas de Gemini: <strong>Gems</strong> para crear asistentes personalizados, <strong>Canvas</strong> para escritura colaborativa, y <strong>Deep Research</strong> para investigacion profunda.</p>
+
+        <div class="objetivo">
+            <div class="objetivo-title">🎯 Objetivos de esta practica</div>
+            <ul>
+                <li>Crear un Gem funcional para tareas de ciberseguridad</li>
+                <li>Usar Canvas para escribir y refinar un documento profesional</li>
+                <li>Realizar una investigacion profunda sobre amenazas actuales</li>
+                <li>Combinar las tres herramientas en un flujo de trabajo real</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <div class="warning-title">⚠️ Requisitos</div>
+            <p>Necesitas haber completado la Clase 2: Gemini Avanzado. Algunas funciones requieren Gemini Pro, pero puedes adaptar los ejercicios a la version gratuita.</p>
+        </div>
+    </section>
+
+    <!-- EJERCICIO 1: GEMS -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">🎯</div>
+            <h2>Ejercicio 1: Crea tu Gem de Analisis de Amenazas</h2>
+        </div>
+
+        <p>Vas a crear un Gem especializado en analizar correos sospechosos y determinar si son phishing.</p>
+
+        <div class="escenario">
+            <div class="escenario-header">
+                <h4>📋 Escenario</h4>
+            </div>
+            <p>Eres el responsable de seguridad de una empresa pequeña. Cada semana recibes correos de empleados preguntando "¿Este correo es real o es phishing?". Quieres un asistente que analice estos correos automaticamente.</p>
+        </div>
+
+        <h3>Paso 1: Crea el Gem</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-content">
+                    <h4>Abre Gem Manager</h4>
+                    <p>En Gemini, haz clic en "Gem manager" en el menu lateral</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Crea nuevo Gem</h4>
+                    <p>Nombre: "Detector de Phishing"</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Copia estas instrucciones</h4>
+                    <p>Usa el prompt de abajo como instrucciones del Gem</p>
+                </div>
+            </div>
+        </div>
+
+        <h4>Instrucciones del Gem:</h4>
+        <div class="code-block">Eres un analista de seguridad especializado en detectar correos de phishing.
+
+Cuando el usuario te muestre un correo (texto o captura de pantalla):
+
+1. ANALIZA estos elementos:
+   - Remitente: ¿El dominio es legitimo? ¿Hay errores sutiles?
+   - Asunto: ¿Crea urgencia o miedo artificial?
+   - Contenido: ¿Errores gramaticales? ¿Solicita datos sensibles?
+   - Enlaces: ¿A donde apuntan realmente?
+   - Adjuntos: ¿Extensiones sospechosas?
+
+2. DA UN VEREDICTO:
+   🟢 LEGITIMO - Explicar por que
+   🟡 SOSPECHOSO - Verificar antes de actuar
+   🔴 PHISHING - No interactuar
+
+3. RECOMIENDA acciones especificas.
+
+4. Si es phishing, explica QUE buscaba el atacante.
+
+Formato de respuesta:
+━━━ ANALISIS DE CORREO ━━━
+[Tu analisis detallado]
+
+VEREDICTO: [Emoji + Clasificacion]
+CONFIANZA: [Alta/Media/Baja]
+
+RECOMENDACION:
+[Que debe hacer el usuario]
+━━━━━━━━━━━━━━━━━━━━━━━━</div>
+
+        <h3>Paso 2: Prueba el Gem</h3>
+        <p>Usa estos correos de prueba para verificar que funciona:</p>
+
+        <div class="ejercicio-box">
+            <h4>📧 Correo de Prueba 1 (Phishing obvio)</h4>
+            <div class="code-block">De: soporte@bancoo-seguro.com
+Asunto: URGENTE: Su cuenta sera bloqueada!!!
+
+Estimado cliente,
+
+Detectamos actividad sospechoza en su cuenta.
+Deve verificar su identidad inmediatamente o su cuenta sera suspendida en 24 horas.
+
+Haga clic aqui para verificar: http://banco-seguro-verify.tk/login
+
+Atentamente,
+El Equipo de Seguridad</div>
+            <p><strong>Resultado esperado:</strong> 🔴 PHISHING - Dominio falso, errores ortograficos, urgencia artificial, enlace sospechoso (.tk)</p>
+        </div>
+
+        <div class="ejercicio-box">
+            <h4>📧 Correo de Prueba 2 (Legitimo)</h4>
+            <div class="code-block">De: noreply@amazon.com
+Asunto: Tu pedido #123-4567890 ha sido enviado
+
+Hola Juan,
+
+Tu pedido ha sido enviado y llegara el martes 15 de enero.
+
+Puedes rastrear tu envio en tu cuenta de Amazon:
+https://www.amazon.com/gp/your-account/order-history
+
+Gracias por comprar en Amazon.
+El equipo de Amazon</div>
+            <p><strong>Resultado esperado:</strong> 🟢 LEGITIMO - Dominio correcto, sin solicitar datos, enlace a amazon.com oficial</p>
+        </div>
+
+        <div class="ejercicio-box">
+            <h4>📧 Correo de Prueba 3 (Sospechoso)</h4>
+            <div class="code-block">De: facturacion@empresa-partner.com
+Asunto: Factura pendiente - Accion requerida
+
+Adjuntamos la factura del servicio contratado.
+Por favor revise y procese el pago.
+
+Ver factura: [Adjunto: factura_enero.zip]
+
+Saludos,
+Departamento de Cobranza</div>
+            <p><strong>Resultado esperado:</strong> 🟡 SOSPECHOSO - Remitente desconocido, adjunto ZIP (podria ser malware), verificar si hay relacion comercial</p>
+        </div>
+
+        <div class="entregable">
+            <h4>✅ Entregable del Ejercicio 1</h4>
+            <ul>
+                <li>Gem "Detector de Phishing" creado y funcionando</li>
+                <li>Probado con los 3 correos de ejemplo</li>
+                <li>Verifica que el Gem identifica correctamente cada tipo</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- EJERCICIO 2: CANVAS -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">📝</div>
+            <h2>Ejercicio 2: Escribe un Reporte con Canvas</h2>
+        </div>
+
+        <p>Usaras Canvas para escribir un reporte de concientizacion sobre phishing para los empleados de tu empresa.</p>
+
+        <div class="escenario">
+            <div class="escenario-header">
+                <h4>📋 Escenario</h4>
+            </div>
+            <p>Tu jefe te pidio crear un documento de una pagina que explique a empleados no tecnicos como identificar correos de phishing. Debe ser claro, visual y facil de entender.</p>
+        </div>
+
+        <h3>Paso 1: Genera el borrador</h3>
+        <div class="code-block">Abre Canvas y escribe:
+
+"Crea un documento de una pagina titulado 'Como Identificar Correos de Phishing'.
+
+Audiencia: Empleados sin conocimientos tecnicos
+Tono: Amigable pero profesional
+Incluir:
+- 5 señales de alerta de phishing
+- Que hacer si recibes un correo sospechoso
+- Ejemplos visuales (describelos como si fueran imagenes)
+
+Formato: Usa bullets, negritas y secciones claras."</div>
+
+        <h3>Paso 2: Refina con selecciones</h3>
+        <p>Una vez que Canvas genere el borrador, practica estas ediciones:</p>
+
+        <div class="ejercicio-box">
+            <h4>✏️ Ediciones a realizar</h4>
+            <ol>
+                <li><strong>Selecciona la introduccion</strong> → Pide: "Hazla mas corta y directa, maximo 2 oraciones"</li>
+                <li><strong>Selecciona las señales de alerta</strong> → Pide: "Añade un ejemplo especifico para cada señal"</li>
+                <li><strong>Selecciona la seccion de 'que hacer'</strong> → Pide: "Convierte esto en una lista numerada de pasos"</li>
+                <li><strong>Selecciona todo el documento</strong> → Pide: "Revisa que no haya jerga tecnica innecesaria"</li>
+            </ol>
+        </div>
+
+        <h3>Paso 3: Añade una seccion</h3>
+        <div class="code-block">Selecciona el final del documento y pide:
+
+"Añade una seccion final titulada 'Contacto de Emergencia' que diga:
+- A quien reportar correos sospechosos
+- Numero de telefono del equipo de IT (usa XXX-XXX-XXXX como placeholder)
+- Recordatorio de que es mejor preguntar que lamentarse"</div>
+
+        <div class="tip">
+            <div class="tip-title">💡 Tips para Canvas</div>
+            <ul>
+                <li>Puedes deshacer cambios si no te gustan</li>
+                <li>Selecciona solo lo que quieres cambiar, no todo el documento</li>
+                <li>Usa comandos especificos: "mas formal", "mas corto", "añade ejemplos"</li>
+            </ul>
+        </div>
+
+        <div class="entregable">
+            <h4>✅ Entregable del Ejercicio 2</h4>
+            <ul>
+                <li>Documento de concientizacion completo</li>
+                <li>Al menos 4 ediciones realizadas con seleccion de texto</li>
+                <li>Copia el documento final a un archivo de Word o Google Docs</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- EJERCICIO 3: DEEP RESEARCH -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">🔍</div>
+            <h2>Ejercicio 3: Investigacion Profunda de Amenazas</h2>
+        </div>
+
+        <p>Usaras Deep Research para investigar las amenazas de ransomware mas recientes y crear un briefing ejecutivo.</p>
+
+        <div class="escenario">
+            <div class="escenario-header">
+                <h4>📋 Escenario</h4>
+            </div>
+            <p>El CEO de tu empresa leyo en las noticias sobre ataques de ransomware y quiere saber si la empresa esta en riesgo. Necesitas preparar un resumen ejecutivo de 5 minutos de lectura sobre el panorama actual de ransomware.</p>
+        </div>
+
+        <h3>Paso 1: Lanza la investigacion</h3>
+        <div class="code-block">Haz una investigacion profunda sobre el panorama de ransomware en 2025-2026.
+
+Necesito saber:
+1. Los 5 grupos de ransomware mas activos actualmente
+2. Sectores industriales mas atacados (con porcentajes si los hay)
+3. Monto promedio de rescate que piden
+4. Vectores de ataque mas comunes (como entran)
+5. Casos notables de los ultimos 6 meses
+
+El reporte es para un CEO no tecnico, asi que evita jerga innecesaria.
+Incluye las fuentes de donde sacas cada dato.</div>
+
+        <h3>Paso 2: Espera y revisa</h3>
+        <p>Deep Research puede tomar 2-5 minutos. Mientras esperas, piensa en:</p>
+        <ul>
+            <li>¿Que preguntas de seguimiento podrias hacer?</li>
+            <li>¿Que informacion adicional necesitaria tu CEO?</li>
+        </ul>
+
+        <h3>Paso 3: Verifica la informacion</h3>
+        <div class="ejercicio-box">
+            <h4>🔍 Verificacion obligatoria</h4>
+            <p>Cuando recibas el reporte, verifica al menos 2 datos en fuentes externas:</p>
+            <ol>
+                <li>Busca en Google uno de los grupos de ransomware mencionados</li>
+                <li>Verifica una estadistica (monto de rescate o sector afectado)</li>
+                <li>Confirma que las fuentes citadas existen y son confiables</li>
+            </ol>
+        </div>
+
+        <h3>Paso 4: Refinamiento</h3>
+        <p>Si el reporte es muy largo o tecnico, pide:</p>
+        <div class="code-block">"Resume esto en 5 bullets que pueda leer un CEO en 2 minutos.
+Cada bullet debe responder: ¿Cual es el riesgo? ¿Que tan probable es? ¿Que debemos hacer?"</div>
+
+        <div class="warning">
+            <div class="warning-title">⚠️ Importante sobre Deep Research</div>
+            <p>Los datos de amenazas cambian rapidamente. Siempre verifica fechas y confirma que la informacion sigue siendo actual. Un reporte de hace 3 meses puede estar desactualizado.</p>
+        </div>
+
+        <div class="entregable">
+            <h4>✅ Entregable del Ejercicio 3</h4>
+            <ul>
+                <li>Reporte de Deep Research completado</li>
+                <li>Al menos 2 datos verificados en fuentes externas</li>
+                <li>Resumen ejecutivo de 5 bullets</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- EJERCICIO INTEGRADOR -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">🏆</div>
+            <h2>Ejercicio Integrador: Flujo Completo</h2>
+        </div>
+
+        <p>Ahora combina las tres herramientas en un flujo de trabajo real.</p>
+
+        <div class="escenario">
+            <div class="escenario-header">
+                <h4>📋 Escenario Final</h4>
+            </div>
+            <p>Tu empresa recibio un correo sospechoso que parece ser de un proveedor. Debes: analizarlo, investigar si hay campañas de phishing similares, y escribir un reporte para el equipo directivo.</p>
+        </div>
+
+        <h3>El correo sospechoso:</h3>
+        <div class="code-block">De: pagos@proveedor-industrial.net
+Asunto: Actualizacion de datos bancarios - Accion inmediata
+
+Estimados,
+
+Les informamos que hemos cambiado nuestra cuenta bancaria.
+A partir de ahora, todos los pagos deben realizarse a:
+
+Banco: Internacional Trust Bank
+Cuenta: 4829-3847-2938-1029
+Beneficiario: Proveedor Industrial LLC
+
+Por favor actualicen sus registros inmediatamente para evitar retrasos en entregas.
+
+Adjunto encontraran la carta oficial con el membrete de nuestra empresa.
+
+Saludos cordiales,
+Maria Gonzalez
+Departamento de Finanzas
+Proveedor Industrial S.A.</div>
+
+        <h3>Tu mision:</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-content">
+                    <h4>Usa tu Gem "Detector de Phishing"</h4>
+                    <p>Analiza el correo y determina si es phishing</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Usa Deep Research</h4>
+                    <p>Investiga: "Campañas de Business Email Compromise (BEC) que solicitan cambio de datos bancarios en 2025-2026"</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Usa Canvas</h4>
+                    <p>Escribe un reporte de incidente de 1 pagina para el equipo directivo que incluya: analisis del correo, contexto de la amenaza (de tu investigacion), y recomendaciones</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="entregable">
+            <h4>✅ Entregable Final</h4>
+            <ul>
+                <li>Analisis del Gem mostrando que es 🔴 PHISHING (tipo BEC/fraude bancario)</li>
+                <li>Investigacion sobre ataques BEC similares</li>
+                <li>Reporte ejecutivo de 1 pagina escrito en Canvas</li>
+                <li>Recomendaciones de como prevenir este tipo de ataques</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">💡 Pista</div>
+            <p>Este tipo de correo es un ataque de "Business Email Compromise" (BEC), uno de los mas costosos. Los atacantes se hacen pasar por proveedores para redirigir pagos a sus cuentas.</p>
+        </div>
+    </section>
+
+    <!-- REFLEXION -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">💭</div>
+            <h2>Reflexion Final</h2>
+        </div>
+
+        <p>Antes de terminar, responde estas preguntas (puedes usar Gemini para discutirlas):</p>
+
+        <div class="ejercicio-box">
+            <h4>🤔 Preguntas de reflexion</h4>
+            <ol>
+                <li>¿En que situaciones de tu trabajo diario usarias un Gem personalizado?</li>
+                <li>¿Canvas es mejor que el chat normal para que tipo de tareas?</li>
+                <li>¿Que tan confiable fue la informacion de Deep Research? ¿Encontraste errores?</li>
+                <li>¿Como combinarias estas 3 herramientas en tu flujo de trabajo?</li>
+            </ol>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">📌 Para la proxima practica</div>
+            <p>En la Practica 4 trabajaremos con Analisis de Codigo y Analisis de Imagenes. Prepara algun codigo o script que quieras analizar.</p>
+        </div>
+    </section>
+
+</main>
+
+<footer class="footer">
+    <div class="signature">🔥💀📜🙏</div>
+    <p>📚 Practica 3: Gems, Canvas y Deep Research | Capacitacion Ciberseguridad + IA</p>
+    <p>Creado por <strong>Randhy Paul</strong> para <strong>Gilberto Amadis</strong></p>
+    <p>Material de <a href="https://soulcore.dev" target="_blank">SOUL CORE</a> — 2026</p>
+</footer>
+
+</body>
+</html>

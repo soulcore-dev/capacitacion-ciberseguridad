@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Gemini Avanzado | Capacitacion Ciberseguridad + IA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #9b72cb;
+            --primary-dark: #7c4dff;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --dark: #f1f5f9;
+            --light: #000000;
+            --gray: #94a3b8;
+            --border: #1a1a1a;
+            --card-bg: #0a0a0a;
+            --gemini: linear-gradient(135deg, #9b72cb, #d96570, #4285f4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.7;
+        }
+
+        .hero {
+            background: var(--gemini);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        .hero .subtitle { font-size: 1.2rem; opacity: 0.95; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+        .instrucciones {
+            background: rgba(245, 158, 11, 0.15);
+            border: 2px solid var(--accent);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .instrucciones h2 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instrucciones ul {
+            margin-left: 20px;
+            color: var(--dark);
+        }
+
+        .instrucciones li { margin-bottom: 8px; }
+
+        /* Score Panel */
+        .score-panel {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid var(--border);
+            text-align: center;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+        }
+
+        .score-panel.passed { border-color: var(--secondary); background: rgba(16, 185, 129, 0.1); }
+        .score-panel.failed { border-color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .score-display.passed { color: var(--secondary); }
+        .score-display.failed { color: var(--danger); }
+        .score-display.pending { color: var(--gray); }
+
+        .score-message {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gemini);
+            color: white;
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(155, 114, 203, 0.4); }
+
+        .btn-secondary {
+            background: #1a1a1a;
+            color: var(--dark);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover { border-color: var(--primary); }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border: 2px solid var(--danger);
+        }
+
+        .btn-danger:hover { background: var(--danger); color: white; }
+
+        .progress-bar {
+            height: 8px;
+            background: #1a1a1a;
+            border-radius: 4px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gemini);
+            transition: width 0.3s;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 8px;
+        }
+
+        /* Question Cards */
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border: 2px solid var(--border);
+            transition: border-color 0.3s;
+        }
+
+        .question-card.correct {
+            border-color: var(--secondary);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+        .question-card.incorrect {
+            border-color: var(--danger);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+        .question-card.unanswered {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            background: var(--gemini);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .question-status {
+            margin-left: auto;
+            font-size: 2rem;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .result-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+
+        .result-badge.correct { background: var(--secondary); color: white; }
+        .result-badge.incorrect { background: var(--danger); color: white; }
+        .result-badge.unanswered { background: var(--accent); color: #000; }
+
+        .question-type {
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .type-gems { background: rgba(155, 114, 203, 0.2); color: #c4b5fd; }
+        .type-canvas { background: rgba(66, 133, 244, 0.2); color: #60a5fa; }
+        .type-research { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .type-codigo { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .type-imagenes { background: rgba(236, 72, 153, 0.2); color: #f472b6; }
+        .type-intelligence { background: rgba(99, 102, 241, 0.2); color: #818cf8; }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options { display: flex; flex-direction: column; gap: 12px; }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px;
+            background: #111111;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .option:hover { border-color: var(--primary); background: rgba(155, 114, 203, 0.1); }
+        .option.selected { border-color: var(--primary); background: rgba(155, 114, 203, 0.15); }
+        .option.correct-answer {
+            border-color: var(--secondary);
+            background: rgba(16, 185, 129, 0.25);
+        }
+        .option.correct-answer::after {
+            content: '✓ CORRECTA';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--secondary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .option.wrong-answer {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.25);
+        }
+        .option.wrong-answer::after {
+            content: '✗ TU RESPUESTA';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--danger);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .option.disabled { pointer-events: none; opacity: 0.7; }
+
+        .option-letter {
+            background: #222222;
+            color: var(--gray);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .option.selected .option-letter { background: var(--primary); color: white; }
+
+        .option-text {
+            flex: 1;
+            color: var(--dark);
+            padding-right: 100px;
+        }
+
+        .explanation {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(155, 114, 203, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            display: none;
+        }
+
+        .explanation.show { display: block; }
+
+        .explanation-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: #111111;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .stat-number.correct { color: var(--secondary); }
+        .stat-number.incorrect { color: var(--danger); }
+        .stat-number.pending { color: var(--accent); }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: #0a0a0a;
+            color: white;
+        }
+
+        .footer p { color: rgba(255,255,255,0.7); }
+        .footer a { color: var(--primary); }
+        .signature { font-size: 1.3rem; margin-bottom: 10px; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .summary-stats { grid-template-columns: 1fr; }
+            .option-text { padding-right: 10px; }
+            .option.correct-answer::after,
+            .option.wrong-answer::after {
+                position: static;
+                display: block;
+                margin-top: 10px;
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="hero">
+    <h1>Quiz: Gemini Avanzado</h1>
+    <p class="subtitle">Evalua tu conocimiento sobre las 6 funciones avanzadas de Gemini</p>
+    <span class="badge">15 Preguntas | Aprobar: 12/15 (80%)</span>
+</header>
+
+<main class="container">
+
+    <div class="instrucciones">
+        <h2>📋 Instrucciones</h2>
+        <ul>
+            <li>Este quiz cubre: <strong>Gems, Canvas, Personal Intelligence, Deep Research, Analisis de Codigo y Analisis de Imagenes</strong></li>
+            <li>Necesitas <strong>12 de 15 respuestas correctas</strong> (80%) para aprobar</li>
+            <li>Selecciona una opcion para cada pregunta</li>
+            <li>Al terminar, haz clic en <strong>"Verificar Respuestas"</strong></li>
+            <li>Tu progreso se guarda automaticamente</li>
+        </ul>
+    </div>
+
+    <!-- Score Panel -->
+    <div class="score-panel" id="scorePanel">
+        <div class="score-display pending" id="scoreDisplay">--/15</div>
+        <div class="score-message" id="scoreMessage">Responde todas las preguntas y verifica tus respuestas</div>
+        <div class="btn-group">
+            <button class="btn btn-primary" onclick="verificarRespuestas()">✓ Verificar Respuestas</button>
+            <button class="btn btn-secondary" onclick="reiniciarQuiz()">↻ Reiniciar</button>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        <div class="progress-text" id="progressText">0 de 15 respondidas</div>
+    </div>
+
+    <!-- Questions Container -->
+    <div id="questionsContainer"></div>
+
+</main>
+
+<footer class="footer">
+    <div class="signature">🔥💀📜🙏</div>
+    <p>📚 Quiz: Gemini Avanzado | Capacitacion Ciberseguridad + IA</p>
+    <p>Creado por <strong>Randhy Paul</strong> para <strong>Gilberto Amadis</strong></p>
+    <p>Material de <a href="https://soulcore.dev" target="_blank">SOUL CORE</a> — 2026</p>
+</footer>
+
+<script>
+const questions = [
+    // GEMS (3 preguntas)
+    {
+        id: 1,
+        type: 'gems',
+        typeLabel: 'Gems',
+        question: '¿Que es un Gem en Google Gemini?',
+        options: [
+            'Una piedra preciosa virtual que se colecciona',
+            'Un mini-asistente con instrucciones personalizadas permanentes',
+            'Un plugin que se descarga de la tienda de Google',
+            'Un modo de conversacion premium'
+        ],
+        correct: 1,
+        explanation: 'Los Gems son asistentes personalizados con instrucciones que se mantienen en cada conversacion. Creas un Gem una vez con instrucciones especificas y lo usas siempre que necesites ese tipo de ayuda.'
+    },
+    {
+        id: 2,
+        type: 'gems',
+        typeLabel: 'Gems',
+        question: '¿Cual es la ventaja principal de usar Gems en lugar de prompts normales?',
+        options: [
+            'Son mas baratos de usar',
+            'No necesitas repetir el contexto y las instrucciones cada vez',
+            'Responden mas rapido que el chat normal',
+            'Pueden acceder a internet en tiempo real'
+        ],
+        correct: 1,
+        explanation: 'La ventaja principal es la consistencia y el ahorro de tiempo. En lugar de escribir un prompt largo cada vez, defines las instrucciones una vez y el Gem las mantiene en todas las conversaciones.'
+    },
+    {
+        id: 3,
+        type: 'gems',
+        typeLabel: 'Gems',
+        question: 'En las instrucciones de un Gem para analisis de seguridad, ¿que elemento NO deberia faltar?',
+        options: [
+            'Emojis decorativos para hacer el output mas visual',
+            'Indicaciones claras de que hacer si NO sabe algo',
+            'Una lista de todos los ataques conocidos',
+            'El precio del servicio de consultoria'
+        ],
+        correct: 1,
+        explanation: 'Es crucial indicar que el Gem diga claramente cuando no sabe algo en lugar de inventar. En ciberseguridad, informacion incorrecta puede ser peligrosa. Siempre incluye: "Si no sabes algo, dilo claramente."'
+    },
+    // CANVAS (2 preguntas)
+    {
+        id: 4,
+        type: 'canvas',
+        typeLabel: 'Canvas',
+        question: '¿Que permite hacer Gemini Canvas que el chat normal no puede?',
+        options: [
+            'Generar imagenes de alta resolucion',
+            'Seleccionar partes especificas del texto y editarlas individualmente',
+            'Conectarse con otras aplicaciones de Google',
+            'Traducir documentos automaticamente'
+        ],
+        correct: 1,
+        explanation: 'Canvas es un espacio de escritura colaborativa donde puedes seleccionar partes especificas del texto y pedir cambios solo en esas partes, sin afectar el resto del documento.'
+    },
+    {
+        id: 5,
+        type: 'canvas',
+        typeLabel: 'Canvas',
+        question: 'Estas escribiendo un reporte en Canvas y quieres que la conclusion sea mas ejecutiva. ¿Que debes hacer?',
+        options: [
+            'Borrar todo el documento y empezar de nuevo',
+            'Seleccionar solo la conclusion y pedir "hazla mas ejecutiva"',
+            'Pedir que reescriba todo el documento con tono ejecutivo',
+            'Copiar la conclusion a otro chat y editarla alli'
+        ],
+        correct: 1,
+        explanation: 'En Canvas puedes seleccionar solo la seccion que quieres modificar. Esto te permite mantener el resto del documento intacto mientras ajustas partes especificas.'
+    },
+    // PERSONAL INTELLIGENCE (2 preguntas)
+    {
+        id: 6,
+        type: 'intelligence',
+        typeLabel: 'Personal Intelligence',
+        question: '¿Que extensiones de Google puede conectar Personal Intelligence?',
+        options: [
+            'Solo Gmail',
+            'Gmail, Drive, YouTube, Maps, Calendar y Flights',
+            'Todas las aplicaciones de Microsoft Office',
+            'Solo aplicaciones de terceros'
+        ],
+        correct: 1,
+        explanation: 'Personal Intelligence conecta con varias apps de Google: Gmail, Drive, YouTube, Maps, Calendar y Flights. Esto permite que Gemini de respuestas basadas en tu informacion personal.'
+    },
+    {
+        id: 7,
+        type: 'intelligence',
+        typeLabel: 'Personal Intelligence',
+        question: '¿Cual es una preocupacion importante al usar Personal Intelligence?',
+        options: [
+            'Es muy caro de usar',
+            'Solo funciona en ingles',
+            'Gemini accede a tu informacion personal (correos, archivos, etc.)',
+            'Hace que las respuestas sean mas lentas'
+        ],
+        correct: 2,
+        explanation: 'La preocupacion principal es la privacidad. Al activar extensiones, Gemini puede leer tus correos, archivos de Drive, etc. Debes decidir cuidadosamente que extensiones activas y revisar las politicas de privacidad.'
+    },
+    // DEEP RESEARCH (2 preguntas)
+    {
+        id: 8,
+        type: 'research',
+        typeLabel: 'Deep Research',
+        question: '¿Que hace Deep Research que lo diferencia del chat normal de Gemini?',
+        options: [
+            'Responde preguntas mas rapido',
+            'Consulta multiples fuentes y genera un reporte estructurado con referencias',
+            'Traduce las respuestas a varios idiomas',
+            'Crea presentaciones automaticamente'
+        ],
+        correct: 1,
+        explanation: 'Deep Research investiga a fondo consultando multiples fuentes, y genera un reporte completo y estructurado que incluye referencias. Es como tener un asistente de investigacion.'
+    },
+    {
+        id: 9,
+        type: 'research',
+        typeLabel: 'Deep Research',
+        question: 'Despues de usar Deep Research para un tema de ciberseguridad, ¿que debes hacer?',
+        options: [
+            'Confiar completamente en los datos porque vienen de multiples fuentes',
+            'Verificar al menos algunos datos criticos en fuentes oficiales',
+            'Eliminar el reporte y hacerlo manualmente',
+            'Compartirlo inmediatamente con todo el equipo'
+        ],
+        correct: 1,
+        explanation: 'Aunque Deep Research incluye fuentes, siempre debes verificar datos criticos. Las fuentes pueden estar desactualizadas o Gemini puede malinterpretar informacion. En seguridad, un dato incorrecto puede ser peligroso.'
+    },
+    // ANALISIS DE CODIGO (3 preguntas)
+    {
+        id: 10,
+        type: 'codigo',
+        typeLabel: 'Analisis Codigo',
+        question: 'Tienes un script Python con un error y no sabes que lo causa. ¿Como debes pedir ayuda a Gemini?',
+        options: [
+            'Solo pegar el codigo y decir "arreglalo"',
+            'Incluir el codigo, el error exacto, y explicar que deberia hacer el codigo',
+            'Describir el error con tus propias palabras sin mostrar el codigo',
+            'Pedir que reescriba todo el programa desde cero'
+        ],
+        correct: 1,
+        explanation: 'Para debugging efectivo, siempre incluye: 1) El codigo, 2) El mensaje de error exacto, 3) Que deberia hacer el codigo. Esto da el contexto necesario para un diagnostico preciso.'
+    },
+    {
+        id: 11,
+        type: 'codigo',
+        typeLabel: 'Analisis Codigo',
+        question: '¿Cual de estas vulnerabilidades puede detectar Gemini al analizar codigo?',
+        options: [
+            'Solo errores de sintaxis',
+            'SQL Injection, XSS, contraseñas en texto plano, y otras del OWASP Top 10',
+            'Solo problemas de rendimiento',
+            'Gemini no puede analizar vulnerabilidades de seguridad'
+        ],
+        correct: 1,
+        explanation: 'Gemini puede identificar vulnerabilidades comunes como SQL Injection, XSS, CSRF, contraseñas en texto plano, y muchas otras. Es util como primera revision, pero no reemplaza una auditoria profesional.'
+    },
+    {
+        id: 12,
+        type: 'codigo',
+        typeLabel: 'Analisis Codigo',
+        question: 'Encontraste un script PowerShell sospechoso. ¿Que debes pedir a Gemini para analizarlo?',
+        options: [
+            'Que lo ejecute para ver que hace',
+            'Que analice linea por linea, identifique IOCs y mapee a MITRE ATT&CK',
+            'Que lo borre del sistema',
+            'Que lo convierta a Python'
+        ],
+        correct: 1,
+        explanation: 'NUNCA ejecutes codigo sospechoso. Pide a Gemini que analice cada linea, identifique Indicadores de Compromiso (IOCs), y mapee las tecnicas a MITRE ATT&CK para entender que hace sin ejecutarlo.'
+    },
+    // ANALISIS DE IMAGENES (3 preguntas)
+    {
+        id: 13,
+        type: 'imagenes',
+        typeLabel: 'Analisis Imagenes',
+        question: '¿Que tipo de imagenes puede analizar Gemini?',
+        options: [
+            'Solo fotos de paisajes',
+            'Fotos, capturas de pantalla, diagramas, documentos escaneados y mas',
+            'Solo imagenes generadas por IA',
+            'Solo imagenes en formato PNG'
+        ],
+        correct: 1,
+        explanation: 'Gemini puede analizar todo tipo de imagenes: fotos, capturas de pantalla de errores, diagramas de red, documentos escaneados, graficas, diseños de UI, etc.'
+    },
+    {
+        id: 14,
+        type: 'imagenes',
+        typeLabel: 'Analisis Imagenes',
+        question: 'Un usuario te envia una captura de un pop-up que dice "Tu computadora esta infectada, llama a este numero". ¿Que tipo de amenaza es?',
+        options: [
+            'Un virus real que infecto la computadora',
+            'Una estafa de soporte tecnico (Tech Support Scam)',
+            'Un error legitimo de Windows',
+            'Un mensaje del antivirus'
+        ],
+        correct: 1,
+        explanation: 'Los pop-ups que muestran "infecciones" y numeros de telefono son estafas de soporte tecnico (Tech Support Scam). Las empresas legitimas como Microsoft nunca muestran numeros de telefono en mensajes de error.'
+    },
+    {
+        id: 15,
+        type: 'imagenes',
+        typeLabel: 'Analisis Imagenes',
+        question: '¿Que precaucion debes tomar ANTES de subir una imagen a Gemini para analisis?',
+        options: [
+            'Convertirla a blanco y negro',
+            'Verificar que no contenga informacion sensible (datos personales, credenciales, etc.)',
+            'Reducir su tamaño a menos de 100KB',
+            'Añadirle una marca de agua'
+        ],
+        correct: 1,
+        explanation: 'Antes de subir cualquier imagen, verifica que no contenga informacion sensible como nombres, direcciones, contraseñas visibles, datos de clientes, o informacion confidencial de la empresa.'
+    }
+];
+
+let userAnswers = {};
+let quizSubmitted = false;
+
+// Inicializar
+document.addEventListener('DOMContentLoaded', function() {
+    cargarProgreso();
+    renderizarPreguntas();
+    actualizarProgreso();
+});
+
+function renderizarPreguntas() {
+    const container = document.getElementById('questionsContainer');
+    container.innerHTML = questions.map(q => `
+        <div class="question-card" id="question-${q.id}" data-question="${q.id}">
+            <div class="question-header">
+                <div class="question-number">${q.id}</div>
+                <span class="question-type type-${q.type}">${q.typeLabel}</span>
+                <div class="question-status" id="status-${q.id}"></div>
+            </div>
+            <div class="question-text">${q.question}</div>
+            <div class="options">
+                ${q.options.map((opt, idx) => `
+                    <div class="option ${userAnswers[q.id] === idx ? 'selected' : ''}"
+                         onclick="seleccionarOpcion(${q.id}, ${idx})"
+                         data-question="${q.id}"
+                         data-option="${idx}">
+                        <span class="option-letter">${String.fromCharCode(65 + idx)}</span>
+                        <span class="option-text">${opt}</span>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="explanation" id="explanation-${q.id}">
+                <div class="explanation-title">💡 Explicacion:</div>
+                <p>${q.explanation}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+function seleccionarOpcion(questionId, optionIdx) {
+    if (quizSubmitted) return;
+
+    userAnswers[questionId] = optionIdx;
+
+    // Actualizar UI
+    const card = document.getElementById(`question-${questionId}`);
+    card.querySelectorAll('.option').forEach((opt, idx) => {
+        opt.classList.toggle('selected', idx === optionIdx);
+    });
+
+    guardarProgreso();
+    actualizarProgreso();
+}
+
+function actualizarProgreso() {
+    const respondidas = Object.keys(userAnswers).length;
+    const total = questions.length;
+    const porcentaje = (respondidas / total) * 100;
+
+    document.getElementById('progressFill').style.width = `${porcentaje}%`;
+    document.getElementById('progressText').textContent = `${respondidas} de ${total} respondidas`;
+}
+
+function verificarRespuestas() {
+    quizSubmitted = true;
+
+    let correctas = 0;
+    let incorrectas = 0;
+    let sinResponder = 0;
+
+    questions.forEach(q => {
+        const card = document.getElementById(`question-${q.id}`);
+        const statusEl = document.getElementById(`status-${q.id}`);
+        const explanationEl = document.getElementById(`explanation-${q.id}`);
+
+        // Deshabilitar opciones
+        card.querySelectorAll('.option').forEach(opt => opt.classList.add('disabled'));
+
+        if (userAnswers[q.id] === undefined) {
+            // Sin responder
+            sinResponder++;
+            card.classList.add('unanswered');
+            statusEl.innerHTML = '<span class="result-badge unanswered">SIN RESPONDER</span>';
+        } else if (userAnswers[q.id] === q.correct) {
+            // Correcta
+            correctas++;
+            card.classList.add('correct');
+            statusEl.innerHTML = '<span class="result-badge correct">✓ CORRECTA</span>';
+            card.querySelector(`.option[data-option="${q.correct}"]`).classList.add('correct-answer');
+        } else {
+            // Incorrecta
+            incorrectas++;
+            card.classList.add('incorrect');
+            statusEl.innerHTML = '<span class="result-badge incorrect">✗ INCORRECTA</span>';
+            card.querySelector(`.option[data-option="${userAnswers[q.id]}"]`).classList.add('wrong-answer');
+            card.querySelector(`.option[data-option="${q.correct}"]`).classList.add('correct-answer');
+        }
+
+        explanationEl.classList.add('show');
+    });
+
+    // Actualizar panel de score
+    const scorePanel = document.getElementById('scorePanel');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const scoreMessage = document.getElementById('scoreMessage');
+
+    scoreDisplay.textContent = `${correctas}/15`;
+    scoreDisplay.classList.remove('pending', 'passed', 'failed');
+
+    if (correctas >= 12) {
+        scorePanel.classList.add('passed');
+        scoreDisplay.classList.add('passed');
+        scoreMessage.innerHTML = `
+            <strong>🎉 ¡APROBADO!</strong><br>
+            Dominas las funciones avanzadas de Gemini.
+            <div class="summary-stats">
+                <div class="stat-box">
+                    <div class="stat-number correct">${correctas}</div>
+                    <div class="stat-label">Correctas</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number incorrect">${incorrectas}</div>
+                    <div class="stat-label">Incorrectas</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number pending">${sinResponder}</div>
+                    <div class="stat-label">Sin responder</div>
+                </div>
+            </div>
+        `;
+    } else {
+        scorePanel.classList.add('failed');
+        scoreDisplay.classList.add('failed');
+        scoreMessage.innerHTML = `
+            <strong>📚 Necesitas repasar</strong><br>
+            Revisa la Clase 2 y las practicas 3 y 4.
+            <div class="summary-stats">
+                <div class="stat-box">
+                    <div class="stat-number correct">${correctas}</div>
+                    <div class="stat-label">Correctas</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number incorrect">${incorrectas}</div>
+                    <div class="stat-label">Incorrectas</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number pending">${sinResponder}</div>
+                    <div class="stat-label">Sin responder</div>
+                </div>
+            </div>
+        `;
+    }
+
+    guardarProgreso();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function reiniciarQuiz() {
+    if (!confirm('¿Seguro que quieres reiniciar el quiz? Se borraran todas tus respuestas.')) return;
+
+    userAnswers = {};
+    quizSubmitted = false;
+    localStorage.removeItem('quizGeminiAvanzadoProgreso');
+
+    // Reset UI
+    document.getElementById('scorePanel').classList.remove('passed', 'failed');
+    document.getElementById('scoreDisplay').textContent = '--/15';
+    document.getElementById('scoreDisplay').classList.remove('passed', 'failed');
+    document.getElementById('scoreDisplay').classList.add('pending');
+    document.getElementById('scoreMessage').textContent = 'Responde todas las preguntas y verifica tus respuestas';
+
+    renderizarPreguntas();
+    actualizarProgreso();
+}
+
+function guardarProgreso() {
+    const data = {
+        answers: userAnswers,
+        submitted: quizSubmitted,
+        timestamp: Date.now()
+    };
+    localStorage.setItem('quizGeminiAvanzadoProgreso', JSON.stringify(data));
+}
+
+function cargarProgreso() {
+    const saved = localStorage.getItem('quizGeminiAvanzadoProgreso');
+    if (saved) {
+        const data = JSON.parse(saved);
+        userAnswers = data.answers || {};
+        if (data.submitted) {
+            quizSubmitted = false; // Reset para permitir re-verificar
+            setTimeout(() => verificarRespuestas(), 100);
+        }
+    }
+}
+</script>
+
+</body>
+</html>

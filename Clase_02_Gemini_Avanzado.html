@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 2: Gemini Avanzado | Capacitacion Ciberseguridad + IA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #9b72cb;
+            --primary-dark: #7c4dff;
+            --secondary: #34a853;
+            --accent: #ea4335;
+            --warning: #fbbc04;
+            --dark: #f1f5f9;
+            --light: #000000;
+            --gray: #94a3b8;
+            --border: #1a1a1a;
+            --card-bg: #0a0a0a;
+            --gemini-gradient: linear-gradient(135deg, #9b72cb, #d96570, #4285f4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.7;
+        }
+
+        /* Header Hero */
+        .hero {
+            background: var(--gemini-gradient);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .badge-advanced {
+            background: rgba(155, 114, 203, 0.4);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* Navigation */
+        .nav-container {
+            background: #0a0a0a;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+            padding: 15px 20px;
+            overflow-x: auto;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: var(--gray);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .nav a:hover {
+            background: #111111;
+            color: var(--primary);
+        }
+
+        .nav a.gemini { border-left: 3px solid var(--primary); }
+        .nav a.ejercicios { border-left: 3px solid var(--accent); }
+
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Section Styling */
+        .section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #111111;
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .section-icon.gemini {
+            background: var(--gemini-gradient);
+        }
+
+        .section-icon.ejercicio {
+            background: linear-gradient(135deg, var(--accent), var(--warning));
+        }
+
+        .section-icon.recursos {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 30px 0 15px;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray);
+            margin: 20px 0 10px;
+        }
+
+        p {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        /* Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .feature-card {
+            background: #111111;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(155, 114, 203, 0.2);
+        }
+
+        .feature-card h4 {
+            margin-top: 0;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* Steps */
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #111111;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            background: var(--primary);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            margin: 0 0 8px;
+            color: var(--dark);
+        }
+
+        .step-content p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Code/URL blocks */
+        .url-block {
+            background: #111111;
+            color: #e8eaed;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin: 15px 0;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+        }
+
+        .url-block a {
+            color: #8ab4f8;
+        }
+
+        /* Tips */
+        .tip {
+            background: rgba(52, 168, 83, 0.15);
+            border-left: 4px solid var(--secondary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .warning {
+            background: rgba(251, 188, 4, 0.15);
+            border-left: 4px solid var(--warning);
+        }
+
+        .warning .tip-title {
+            color: var(--warning);
+        }
+
+        .pro-tip {
+            background: rgba(155, 114, 203, 0.15);
+            border-left: 4px solid var(--primary);
+        }
+
+        .pro-tip .tip-title {
+            color: var(--primary);
+        }
+
+        /* Ejercicio Box */
+        .ejercicio {
+            background: rgba(233, 30, 99, 0.1);
+            border: 2px solid #e91e63;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .ejercicio h4 {
+            color: #f48fb1;
+            font-size: 1.2rem;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ejercicio ol {
+            margin-left: 20px;
+            color: var(--dark);
+        }
+
+        .ejercicio li {
+            margin-bottom: 10px;
+        }
+
+        /* Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95rem;
+        }
+
+        .comparison-table th {
+            background: #111111;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            border: 1px solid var(--border);
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border: 1px solid var(--border);
+            color: var(--gray);
+        }
+
+        .comparison-table tr:hover {
+            background: #111111;
+        }
+
+        .comparison-table .check {
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: var(--gray);
+        }
+
+        /* Keyboard shortcuts */
+        kbd {
+            background: #111111;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 0 var(--border);
+            color: var(--dark);
+        }
+
+        /* Links */
+        a {
+            color: var(--primary);
+        }
+
+        /* Requisitos box */
+        .requisitos {
+            background: rgba(66, 133, 244, 0.1);
+            border: 2px solid #4285f4;
+            border-radius: 16px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .requisitos h4 {
+            color: #8ab4f8;
+            margin-top: 0;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: #0a0a0a;
+            color: white;
+        }
+
+        .footer p {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .footer a {
+            color: var(--primary);
+        }
+
+        .signature {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 25px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .nav-container {
+                display: none;
+            }
+
+            .section {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<header class="hero">
+    <div class="hero-content">
+        <h1>Gemini Avanzado</h1>
+        <p class="subtitle">Domina las 6 funciones avanzadas de Google Gemini</p>
+        <span class="badge badge-advanced">Clase 2 | Nivel Avanzado</span>
+    </div>
+</header>
+
+<!-- Navigation -->
+<div class="nav-container">
+    <nav class="nav">
+        <a href="#intro" class="gemini">Introduccion</a>
+        <a href="#gems" class="gemini">Gems</a>
+        <a href="#canvas" class="gemini">Canvas</a>
+        <a href="#intelligence" class="gemini">Personal Intelligence</a>
+        <a href="#research" class="gemini">Deep Research</a>
+        <a href="#codigo" class="gemini">Analisis Codigo</a>
+        <a href="#imagenes" class="gemini">Analisis Imagenes</a>
+        <a href="#ejercicios" class="ejercicios">Ejercicios</a>
+    </nav>
+</div>
+
+<!-- Main Content -->
+<main class="container">
+
+    <!-- Introduccion -->
+    <section id="intro" class="section">
+        <div class="section-header">
+            <div class="section-icon gemini">🚀</div>
+            <h2>Introduccion: Nivel Avanzado</h2>
+        </div>
+
+        <p>En esta clase exploraremos las <strong>6 funciones avanzadas</strong> de Gemini que te permitiran sacar el maximo provecho de esta IA. Estas herramientas son particularmente utiles para profesionales y estudiantes que quieren ir mas alla del uso basico.</p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>🎯 Gems</h4>
+                <p>Asistentes personalizados con instrucciones permanentes</p>
+            </div>
+            <div class="feature-card">
+                <h4>📝 Canvas</h4>
+                <p>Espacio de escritura colaborativa con la IA</p>
+            </div>
+            <div class="feature-card">
+                <h4>🧠 Personal Intelligence</h4>
+                <p>Conexion con tus apps de Google</p>
+            </div>
+            <div class="feature-card">
+                <h4>🔍 Deep Research</h4>
+                <p>Investigacion profunda automatizada</p>
+            </div>
+            <div class="feature-card">
+                <h4>💻 Analisis de Codigo</h4>
+                <p>Revision y mejora de codigo</p>
+            </div>
+            <div class="feature-card">
+                <h4>🖼️ Analisis de Imagenes</h4>
+                <p>Vision por computadora integrada</p>
+            </div>
+        </div>
+
+        <div class="requisitos">
+            <h4>📋 Requisitos previos</h4>
+            <ul>
+                <li>Haber completado la Clase 1: Gemini Basico</li>
+                <li>Cuenta de Google activa</li>
+                <li>Acceso a <a href="https://gemini.google.com" target="_blank">gemini.google.com</a></li>
+            </ul>
+            <p><strong>Nota:</strong> Algunas funciones como Gems y Personal Intelligence requieren Gemini Pro ($19.99/mes), pero puedes practicar con las funciones gratuitas.</p>
+        </div>
+    </section>
+
+    <!-- GEMS -->
+    <section id="gems" class="section">
+        <div class="section-header">
+            <div class="section-icon gemini">🎯</div>
+            <h2>1. Gems: Asistentes Personalizados</h2>
+        </div>
+
+        <p>Los <strong>Gems</strong> son mini-asistentes de IA con instrucciones permanentes. En lugar de repetir el contexto en cada conversacion, creas un Gem una vez y lo usas siempre que necesites ese tipo de ayuda.</p>
+
+        <h3>Por que usar Gems</h3>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>⏱️ Ahorra tiempo</h4>
+                <p>No repites instrucciones largas cada vez</p>
+            </div>
+            <div class="feature-card">
+                <h4>🎯 Consistencia</h4>
+                <p>Siempre obtienes respuestas en el formato que definiste</p>
+            </div>
+            <div class="feature-card">
+                <h4>🔧 Especializacion</h4>
+                <p>Cada Gem se vuelve experto en su tarea especifica</p>
+            </div>
+        </div>
+
+        <h3>Como crear un Gem</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-content">
+                    <h4>Abre el Gem Manager</h4>
+                    <p>En Gemini, haz clic en <strong>"Gem manager"</strong> en el menu lateral izquierdo</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Crea un nuevo Gem</h4>
+                    <p>Haz clic en <strong>"Create new Gem"</strong> y dale un nombre descriptivo</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Escribe las instrucciones</h4>
+                    <p>Define el ROL, comportamiento, restricciones y formato de respuesta</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Prueba y ajusta</h4>
+                    <p>Usa el Gem, observa los resultados, y refina las instrucciones si es necesario</p>
+                </div>
+            </div>
+        </div>
+
+        <h3>Plantilla para crear Gems efectivos</h3>
+        <div class="url-block">
+NOMBRE: [Nombre descriptivo del Gem]
+
+INSTRUCCIONES:
+"Eres [ROL con experiencia especifica].
+Tu objetivo es [TAREA PRINCIPAL].
+
+Cuando el usuario te hable:
+1. [Paso 1 de tu proceso]
+2. [Paso 2 de tu proceso]
+3. [Paso 3 de tu proceso]
+
+Formato de respuesta:
+- [Como estructuras tus respuestas]
+- [Longitud esperada]
+- [Elementos que siempre incluyes]
+
+Restricciones:
+- [Lo que NO debes hacer]
+- [Limites de tu conocimiento]
+
+Si no sabes algo, dilo claramente en lugar de inventar."
+        </div>
+
+        <h3>Ejemplos de Gems utiles</h3>
+
+        <h4>Gem: Analista de Seguridad</h4>
+        <div class="url-block">
+Nombre: Analista SOC
+
+Instrucciones:
+"Eres un analista de seguridad de nivel 2 con 5 años de experiencia en un SOC.
+Tu objetivo es ayudar a analizar y responder a incidentes de seguridad.
+
+Cuando te describan un incidente:
+1. Clasifica la severidad (Critica, Alta, Media, Baja)
+2. Identifica los IOCs (Indicadores de Compromiso)
+3. Sugiere pasos de contencion inmediata
+4. Recomienda acciones de investigacion
+
+Formato:
+- Usa tablas cuando sea util
+- Incluye comandos especificos cuando aplique
+- Siempre menciona que evidencia preservar
+
+Si el incidente requiere escalacion, indicalo claramente."
+        </div>
+
+        <h4>Gem: Preparador de Examenes</h4>
+        <div class="url-block">
+Nombre: Quiz Master
+
+Instrucciones:
+"Eres un profesor experto en crear examenes de certificacion.
+Tu objetivo es generar preguntas de practica de alta calidad.
+
+Cuando te pidan preguntas sobre un tema:
+1. Genera preguntas de opcion multiple (4 opciones)
+2. Incluye una pregunta trampa comun
+3. Varia la dificultad (facil, media, dificil)
+4. Explica por que cada respuesta incorrecta esta mal
+
+Formato:
+Pregunta X: [Pregunta]
+A) [Opcion]
+B) [Opcion]
+C) [Opcion]
+D) [Opcion]
+
+Respuesta correcta: [Letra]
+Explicacion: [Por que es correcta y por que las otras no]
+
+No reveles las respuestas hasta que el usuario las pida."
+        </div>
+
+        <div class="pro-tip">
+            <div class="tip-title">💎 Pro tip</div>
+            <p>Crea diferentes Gems para diferentes etapas de tu trabajo: uno para investigar, otro para escribir, otro para revisar. Esto mantiene cada Gem enfocado y efectivo.</p>
+        </div>
+    </section>
+
+    <!-- CANVAS -->
+    <section id="canvas" class="section">
+        <div class="section-header">
+            <div class="section-icon gemini">📝</div>
+            <h2>2. Gemini Canvas: Escritura Colaborativa</h2>
+        </div>
+
+        <p><strong>Gemini Canvas</strong> es un espacio de escritura donde puedes colaborar con la IA en tiempo real. A diferencia del chat normal, Canvas te permite seleccionar partes especificas del texto y pedir cambios solo en esas partes.</p>
+
+        <h3>Cuando usar Canvas</h3>
+        <ul>
+            <li>Escribir documentos largos (reportes, propuestas, articulos)</li>
+            <li>Editar y refinar textos existentes</li>
+            <li>Colaborar con la IA en borradores</li>
+            <li>Mantener un documento que evoluciona con multiples ediciones</li>
+        </ul>
+
+        <h3>Como funciona</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-content">
+                    <h4>Inicia Canvas</h4>
+                    <p>Pide a Gemini "Abre Canvas" o haz clic en el icono de Canvas cuando este disponible</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Escribe o pega tu contenido</h4>
+                    <p>Comienza con un borrador o pide a Gemini que genere uno</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Selecciona y edita</h4>
+                    <p>Selecciona cualquier parte del texto y pide cambios especificos</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Itera hasta perfeccionar</h4>
+                    <p>Continua refinando hasta que el documento este listo</p>
+                </div>
+            </div>
+        </div>
+
+        <h3>Comandos utiles en Canvas</h3>
+        <table class="comparison-table">
+            <tr>
+                <th>Selecciona texto y di...</th>
+                <th>Resultado</th>
+            </tr>
+            <tr>
+                <td>"Hazlo mas formal"</td>
+                <td>Cambia el tono a profesional/academico</td>
+            </tr>
+            <tr>
+                <td>"Simplifica esto"</td>
+                <td>Reduce complejidad, usa palabras mas simples</td>
+            </tr>
+            <tr>
+                <td>"Expande este punto"</td>
+                <td>Añade mas detalle y ejemplos</td>
+            </tr>
+            <tr>
+                <td>"Hazlo mas conciso"</td>
+                <td>Elimina redundancias, acorta</td>
+            </tr>
+            <tr>
+                <td>"Añade ejemplos"</td>
+                <td>Incluye casos practicos</td>
+            </tr>
+            <tr>
+                <td>"Corrige la gramatica"</td>
+                <td>Arregla errores sin cambiar el contenido</td>
+            </tr>
+        </table>
+
+        <h3>Ejemplo practico: Escribir un reporte de incidente</h3>
+        <div class="url-block">
+Tu: "Abre Canvas y ayudame a escribir un reporte de incidente de seguridad.
+El incidente fue un intento de phishing detectado el 15 de enero."
+
+[Gemini genera borrador inicial en Canvas]
+
+Tu: [Seleccionas la seccion de impacto]
+"Expande esta seccion con mas detalle tecnico"
+
+[Gemini expande solo esa seccion]
+
+Tu: [Seleccionas la conclusion]
+"Hazla mas ejecutiva, para que la entienda un CEO"
+
+[Gemini simplifica solo la conclusion]
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">💡 Tip</div>
+            <p>Canvas mantiene un historial de versiones. Si un cambio no te gusta, puedes volver atras facilmente.</p>
+        </div>
+    </section>
+
+    <!-- PERSONAL INTELLIGENCE -->
+    <section id="intelligence" class="section">
+        <div class="section-header">
+            <div class="section-icon gemini">🧠</div>
+            <h2>3. Personal Intelligence</h2>
+        </div>
+
+        <p><strong>Personal Intelligence</strong> conecta Gemini con tus aplicaciones de Google, permitiendo respuestas personalizadas basadas en tu informacion real.</p>
+
+        <div class="warning">
+            <div class="tip-title">⚠️ Privacidad</div>
+            <p>Esto significa que Gemini puede acceder a tu Gmail, Drive, Fotos, etc. Decide cuidadosamente que extensiones activas y revisa la politica de privacidad de Google.</p>
+        </div>
+
+        <h3>Extensiones disponibles</h3>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>📧 Gmail</h4>
+                <p>"Busca en mi correo la factura de Amazon del mes pasado"</p>
+            </div>
+            <div class="feature-card">
+                <h4>📁 Google Drive</h4>
+                <p>"Resume el documento 'Propuesta Q4' de mi Drive"</p>
+            </div>
+            <div class="feature-card">
+                <h4>🎥 YouTube</h4>
+                <p>"Resume el ultimo video de mi canal favorito sobre ciberseguridad"</p>
+            </div>
+            <div class="feature-card">
+                <h4>🗺️ Google Maps</h4>
+                <p>"Encuentra restaurantes cerca de mi trabajo"</p>
+            </div>
+            <div class="feature-card">
+                <h4>📅 Google Calendar</h4>
+                <p>"Que reuniones tengo mañana?"</p>
+            </div>
+            <div class="feature-card">
+                <h4>✈️ Google Flights</h4>
+                <p>"Busca vuelos a Miami para el proximo fin de semana"</p>
+            </div>
+        </div>
+
+        <h3>Como activar extensiones</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-content">
+                    <h4>Ve a Configuracion</h4>
+                    <p>En Gemini, haz clic en el icono de configuracion (engranaje)</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Selecciona Extensiones</h4>
+                    <p>Busca la seccion "Extensions" o "Extensiones"</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Activa las que necesites</h4>
+                    <p>Haz clic en el toggle de cada extension que quieras usar</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Autoriza el acceso</h4>
+                    <p>Google te pedira confirmar el acceso a cada servicio</p>
+                </div>
+            </div>
+        </div>
+
+        <h3>Ejemplos de uso</h3>
+
+        <h4>Con Gmail:</h4>
+        <div class="url-block">
+"Busca en mi Gmail todos los correos de soporte@empresa.com de esta semana y resumelos"
+        </div>
+
+        <h4>Con Drive:</h4>
+        <div class="url-block">
+"En mi Drive, encuentra el archivo mas reciente que contenga 'presupuesto 2026' y dime cual es el total"
+        </div>
+
+        <h4>Con YouTube:</h4>
+        <div class="url-block">
+"Busca en YouTube los mejores tutoriales de Python para principiantes y dame una lista con los 5 mejores segun las reseñas"
+        </div>
+
+        <div class="pro-tip">
+            <div class="tip-title">💎 Pro tip: Combinaciones poderosas</div>
+            <p>Puedes combinar extensiones: "Busca en mi calendario las reuniones de esta semana y en mi Gmail los correos relacionados con esas reuniones"</p>
+        </div>
+    </section>
+
+    <!-- DEEP RESEARCH -->
+    <section id="research" class="section">
+        <div class="section-header">
+            <div class="section-icon gemini">🔍</div>
+            <h2>4. Deep Research</h2>
+        </div>
+
+        <p><strong>Deep Research</strong> es como tener un asistente de investigacion. Gemini investiga un tema a fondo, consultando multiples fuentes, y genera un reporte completo con referencias.</p>
+
+        <h3>Cuando usar Deep Research</h3>
+        <ul>
+            <li>Investigar un tema nuevo a profundidad</li>
+            <li>Preparar presentaciones con datos actualizados</li>
+            <li>Comparar productos, servicios o tecnologias</li>
+            <li>Escribir articulos o reportes con fuentes</li>
+            <li>Entender tendencias de mercado o industria</li>
+        </ul>
+
+        <h3>Como funciona</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-content">
+                    <h4>Define tu pregunta de investigacion</h4>
+                    <p>Se especifico sobre que quieres saber</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Activa Deep Research</h4>
+                    <p>Pide explicitamente: "Haz una investigacion profunda sobre..."</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Espera el proceso</h4>
+                    <p>Gemini consulta multiples fuentes (puede tomar unos minutos)</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Recibe el reporte</h4>
+                    <p>Obtendras un documento estructurado con hallazgos y fuentes</p>
+                </div>
+            </div>
+        </div>
+
+        <h3>Ejemplo: Investigacion de ciberseguridad</h3>
+        <div class="url-block">
+"Haz una investigacion profunda sobre las tendencias de ransomware en 2025-2026.
+
+Quiero saber:
+1. Los grupos de ransomware mas activos
+2. Sectores mas afectados
+3. Tecnicas de ataque mas comunes
+4. Mejores practicas de prevencion actuales
+5. Estadisticas de pagos de rescate
+
+Incluye fuentes de cada dato."
+        </div>
+
+        <h3>Estructura tipica del reporte</h3>
+        <table class="comparison-table">
+            <tr>
+                <th>Seccion</th>
+                <th>Contenido</th>
+            </tr>
+            <tr>
+                <td>Resumen Ejecutivo</td>
+                <td>Hallazgos principales en 2-3 parrafos</td>
+            </tr>
+            <tr>
+                <td>Contexto</td>
+                <td>Antecedentes y situacion actual</td>
+            </tr>
+            <tr>
+                <td>Hallazgos Detallados</td>
+                <td>Cada punto de tu pregunta respondido</td>
+            </tr>
+            <tr>
+                <td>Fuentes</td>
+                <td>Lista de articulos, estudios y reportes consultados</td>
+            </tr>
+            <tr>
+                <td>Recomendaciones</td>
+                <td>Acciones sugeridas basadas en los hallazgos</td>
+            </tr>
+        </table>
+
+        <div class="warning">
+            <div class="tip-title">⚠️ Verificacion importante</div>
+            <p>Aunque Deep Research incluye fuentes, siempre verifica los datos criticos. Las fuentes pueden estar desactualizadas o Gemini puede malinterpretar informacion.</p>
+        </div>
+    </section>
+
+    <!-- ANALISIS DE CODIGO -->
+    <section id="codigo" class="section">
+        <div class="section-header">
+            <div class="section-icon gemini">💻</div>
+            <h2>5. Analisis de Codigo</h2>
+        </div>
+
+        <p>Gemini puede analizar, explicar, depurar y mejorar codigo en practicamente cualquier lenguaje de programacion. Es como tener un programador senior disponible 24/7.</p>
+
+        <h3>Capacidades</h3>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>🔍 Explicar codigo</h4>
+                <p>"Que hace este script?" — Gemini explica linea por linea</p>
+            </div>
+            <div class="feature-card">
+                <h4>🐛 Encontrar bugs</h4>
+                <p>"Por que este codigo no funciona?" — Identifica errores</p>
+            </div>
+            <div class="feature-card">
+                <h4>⚡ Optimizar</h4>
+                <p>"Como puedo hacer esto mas eficiente?" — Mejora rendimiento</p>
+            </div>
+            <div class="feature-card">
+                <h4>🔒 Seguridad</h4>
+                <p>"Hay vulnerabilidades aqui?" — Analisis de seguridad</p>
+            </div>
+            <div class="feature-card">
+                <h4>📝 Documentar</h4>
+                <p>"Genera documentacion" — Crea docstrings y comentarios</p>
+            </div>
+            <div class="feature-card">
+                <h4>🔄 Convertir</h4>
+                <p>"Pasa esto a Python" — Traduce entre lenguajes</p>
+            </div>
+        </div>
+
+        <h3>Ejemplo: Analisis de script de seguridad</h3>
+        <div class="url-block">
+"Analiza este script de Python que escanea puertos:
+
+```python
+import socket
+
+def scan_port(ip, port):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(1)
+    result = sock.connect_ex((ip, port))
+    sock.close()
+    return result == 0
+
+for port in range(1, 1025):
+    if scan_port('192.168.1.1', port):
+        print(f'Puerto {port} abierto')
+```
+
+1. Explicame que hace cada parte
+2. Hay algun problema de seguridad o rendimiento?
+3. Como lo mejorarias?"
+        </div>
+
+        <h3>Prompts utiles para codigo</h3>
+
+        <h4>Para debugging:</h4>
+        <div class="url-block">
+"Tengo este error: [pegar error]
+
+Mi codigo es:
+[pegar codigo]
+
+1. Que significa este error?
+2. Donde esta el problema?
+3. Como lo arreglo?"
+        </div>
+
+        <h4>Para revision de seguridad:</h4>
+        <div class="url-block">
+"Actua como un auditor de seguridad. Revisa este codigo y encuentra:
+1. Vulnerabilidades de seguridad (inyeccion, XSS, etc.)
+2. Malas practicas de programacion
+3. Problemas de manejo de datos sensibles
+
+Codigo:
+[pegar codigo]"
+        </div>
+
+        <h4>Para aprender:</h4>
+        <div class="url-block">
+"Soy principiante en Python. Explicame este codigo como si tuviera 10 años:
+[pegar codigo]
+
+Luego muestrame una version mas simple que haga lo mismo."
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">💡 Tip</div>
+            <p>Siempre incluye el lenguaje de programacion y el contexto (que se supone que debe hacer el codigo). Esto ayuda a Gemini a darte respuestas mas precisas.</p>
+        </div>
+    </section>
+
+    <!-- ANALISIS DE IMAGENES -->
+    <section id="imagenes" class="section">
+        <div class="section-header">
+            <div class="section-icon gemini">🖼️</div>
+            <h2>6. Analisis de Imagenes</h2>
+        </div>
+
+        <p>Gemini puede "ver" y analizar imagenes. Esto incluye fotos, capturas de pantalla, diagramas, documentos escaneados, y mas.</p>
+
+        <h3>Que puedes hacer</h3>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>📸 Describir imagenes</h4>
+                <p>"Que hay en esta imagen?" — Descripcion detallada</p>
+            </div>
+            <div class="feature-card">
+                <h4>📄 Extraer texto (OCR)</h4>
+                <p>"Lee el texto de esta foto" — Extrae texto de imagenes</p>
+            </div>
+            <div class="feature-card">
+                <h4>📊 Analizar graficos</h4>
+                <p>"Que muestra esta grafica?" — Interpreta datos visuales</p>
+            </div>
+            <div class="feature-card">
+                <h4>🔍 Identificar objetos</h4>
+                <p>"Que modelo de router es este?" — Identifica productos</p>
+            </div>
+            <div class="feature-card">
+                <h4>🎨 Analizar diseño</h4>
+                <p>"Critica este diseño de UI" — Feedback de diseño</p>
+            </div>
+            <div class="feature-card">
+                <h4>🗺️ Entender diagramas</h4>
+                <p>"Explicame este diagrama de red" — Interpreta diagramas tecnicos</p>
+            </div>
+        </div>
+
+        <h3>Como subir imagenes</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-content">
+                    <h4>Haz clic en el icono de imagen</h4>
+                    <p>En el chat de Gemini, busca el icono de imagen/camara</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Selecciona o arrastra</h4>
+                    <p>Puedes subir desde tu computadora o arrastrar directamente</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Añade tu pregunta</h4>
+                    <p>Escribe que quieres saber sobre la imagen</p>
+                </div>
+            </div>
+        </div>
+
+        <h3>Ejemplos practicos</h3>
+
+        <h4>Analizar diagrama de red:</h4>
+        <div class="url-block">
+[Subir imagen de diagrama de red]
+
+"Analiza este diagrama de red:
+1. Identifica todos los componentes
+2. Hay algun problema de seguridad evidente?
+3. Que mejoras sugeririas?"
+        </div>
+
+        <h4>Leer error de pantalla:</h4>
+        <div class="url-block">
+[Subir captura de pantalla con error]
+
+"Tengo este error en mi computadora.
+1. Que significa?
+2. Es grave?
+3. Como lo soluciono?"
+        </div>
+
+        <h4>Analizar correo sospechoso:</h4>
+        <div class="url-block">
+[Subir captura de correo]
+
+"Analiza este correo que recibi:
+1. Es legitimo o es phishing?
+2. Cuales son las señales de alerta?
+3. Que deberia hacer?"
+        </div>
+
+        <div class="warning">
+            <div class="tip-title">⚠️ Privacidad</div>
+            <p>Ten cuidado con la informacion sensible en las imagenes que subes. Nombres, direcciones, datos personales, o informacion confidencial de la empresa pueden quedar expuestos.</p>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">💡 Tip para capturas</div>
+            <p>Si necesitas ocultar informacion sensible, edita la imagen ANTES de subirla a Gemini. Usa herramientas como Paint o Snipping Tool para tapar datos privados.</p>
+        </div>
+    </section>
+
+    <!-- EJERCICIOS -->
+    <section id="ejercicios" class="section">
+        <div class="section-header">
+            <div class="section-icon ejercicio">📝</div>
+            <h2>Ejercicios Practicos</h2>
+        </div>
+
+        <p>Practica cada una de las funciones avanzadas con estos ejercicios:</p>
+
+        <div class="ejercicio">
+            <h4>🎯 Ejercicio 1: Crea tu Gem de Ciberseguridad</h4>
+            <ol>
+                <li>Abre Gem Manager en Gemini</li>
+                <li>Crea un nuevo Gem llamado "Analista SOC"</li>
+                <li>Usa la plantilla de instrucciones de esta clase</li>
+                <li>Pruebalo con este escenario: "Un usuario reporta que su computadora esta muy lenta y aparecen ventanas emergentes"</li>
+                <li>Evalua si el Gem responde como esperabas</li>
+            </ol>
+        </div>
+
+        <div class="ejercicio">
+            <h4>🎯 Ejercicio 2: Usa Canvas para un reporte</h4>
+            <ol>
+                <li>Pide a Gemini que abra Canvas</li>
+                <li>Dile: "Escribe un borrador de reporte de incidente para un ataque de phishing"</li>
+                <li>Selecciona la seccion de "Impacto" y pide que la expanda</li>
+                <li>Selecciona la "Conclusion" y pide que la haga mas ejecutiva</li>
+                <li>Guarda el documento final</li>
+            </ol>
+        </div>
+
+        <div class="ejercicio">
+            <h4>🎯 Ejercicio 3: Deep Research</h4>
+            <ol>
+                <li>Pide a Gemini: "Haz una investigacion profunda sobre los ataques de supply chain en software de los ultimos 2 años"</li>
+                <li>Espera el reporte (puede tomar 2-3 minutos)</li>
+                <li>Revisa las fuentes citadas</li>
+                <li>Verifica al menos 2 datos del reporte en Google</li>
+            </ol>
+        </div>
+
+        <div class="ejercicio">
+            <h4>🎯 Ejercicio 4: Analisis de Codigo</h4>
+            <ol>
+                <li>Busca un script de Python simple en internet (o usa uno propio)</li>
+                <li>Pide a Gemini que lo explique linea por linea</li>
+                <li>Pregunta: "Hay vulnerabilidades de seguridad en este codigo?"</li>
+                <li>Pide que lo mejore y compara ambas versiones</li>
+            </ol>
+        </div>
+
+        <div class="ejercicio">
+            <h4>🎯 Ejercicio 5: Analisis de Imagen</h4>
+            <ol>
+                <li>Toma una captura de pantalla de cualquier error o mensaje de tu computadora</li>
+                <li>Subela a Gemini</li>
+                <li>Pregunta: "Que significa esto y como lo soluciono?"</li>
+                <li>Evalua si la respuesta es util y precisa</li>
+            </ol>
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">📌 Para la siguiente practica</div>
+            <p>En las practicas 3 y 4 aplicaras estas funciones avanzadas en escenarios reales de ciberseguridad. Asegurate de completar estos ejercicios primero.</p>
+        </div>
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="signature">🔥💀📜🙏</div>
+    <p>📚 Clase 2: Gemini Avanzado | Capacitacion Ciberseguridad + IA</p>
+    <p>Creado por <strong>Randhy Paul</strong> para <strong>Gilberto Amadis</strong></p>
+    <p>Material de <a href="https://soulcore.dev" target="_blank">SOUL CORE</a> — 2026</p>
+</footer>
+
+</body>
+</html>

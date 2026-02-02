@@ -590,38 +590,132 @@
         </div>
     </section>
 
-    <!-- CARACTERISTICAS -->
+    <!-- CARACTERISTICAS PRACTICAS -->
     <section id="caracteristicas" class="section">
         <div class="section-header">
             <div class="section-icon gemini">🧩</div>
-            <h2>Caracteristicas Principales (2026)</h2>
+            <h2>Usos Practicos para el Curso</h2>
         </div>
+
+        <p>En este curso de ciberseguridad, Gemini sera tu aliado para aprender mas rapido. Aqui las 3 formas principales en que lo usaremos:</p>
 
         <div class="features-grid">
             <div class="feature-card">
-                <h4>🎯 Gems (Asistentes personalizados)</h4>
-                <p>Crea mini-asistentes con instrucciones especificas. Ejemplo: un Gem para revisar gramatica, otro para explicar conceptos de ciberseguridad.</p>
+                <h4>🔐 Ciberseguridad con Gemini</h4>
+                <p>Usa Gemini para entender conceptos de seguridad, analizar escenarios de amenazas, y practicar respuesta a incidentes.</p>
             </div>
             <div class="feature-card">
-                <h4>📝 Gemini Canvas</h4>
-                <p>Espacio de escritura colaborativa con la IA. Selecciona texto especifico y pide cambios ("hazlo mas formal", "simplifica esto").</p>
+                <h4>📚 Gemini para Estudiar</h4>
+                <p>Resumir materiales, crear flashcards, generar preguntas de practica, y prepararte para examenes de certificacion.</p>
             </div>
             <div class="feature-card">
-                <h4>🧠 Personal Intelligence</h4>
-                <p>Conecta Gmail, Fotos, YouTube y Search. Gemini entiende TU contexto personal y da respuestas personalizadas.</p>
+                <h4>🔍 Verificar Informacion</h4>
+                <p>Aprender a detectar cuando Gemini "alucina" (inventa informacion) y como verificar datos criticos de seguridad.</p>
             </div>
-            <div class="feature-card">
-                <h4>🔍 Deep Research</h4>
-                <p>Gemini investiga un tema profundamente, consultando multiples fuentes y generando un reporte completo.</p>
+        </div>
+
+        <!-- USO 1: CIBERSEGURIDAD -->
+        <h3>🔐 Ciberseguridad con Gemini</h3>
+        <p>Gemini puede ayudarte a entender conceptos complejos de seguridad informatica. Aqui algunos prompts utiles:</p>
+
+        <h4>Para entender amenazas:</h4>
+        <div class="url-block">
+"Actua como un analista de ciberseguridad. Explicame que es un ataque de ransomware, como funciona tecnicamente, y cuales son las mejores practicas para prevenirlo en una empresa pequeña. Usa un lenguaje que un principiante pueda entender."
+        </div>
+
+        <h4>Para analizar escenarios:</h4>
+        <div class="url-block">
+"Soy estudiante de ciberseguridad. Imagina este escenario: un empleado recibe un correo de 'soporte tecnico' pidiendo que actualice su contraseña haciendo clic en un enlace. ¿Que tipo de ataque es? ¿Cuales son las señales de alerta? ¿Que deberia hacer el empleado?"
+        </div>
+
+        <h4>Para preparar certificaciones:</h4>
+        <div class="url-block">
+"Estoy estudiando para la certificacion CompTIA Security+. Hazme 5 preguntas de practica sobre el tema 'Amenazas, Ataques y Vulnerabilidades' con sus respuestas explicadas."
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">💡 Consejo</div>
+            <p>Siempre especifica tu nivel ("soy principiante", "estoy estudiando para X certificacion") para que Gemini ajuste la complejidad de sus respuestas.</p>
+        </div>
+
+        <!-- USO 2: ESTUDIAR -->
+        <h3>📚 Gemini para Estudiar</h3>
+        <p>Convierte a Gemini en tu tutor personal de estudio con estos metodos:</p>
+
+        <h4>Resumir materiales largos:</h4>
+        <div class="url-block">
+"Resume este texto en 5 puntos clave. Al final, dime cuales son los conceptos mas importantes que debo memorizar: [pegar texto del material de estudio]"
+        </div>
+
+        <h4>Crear flashcards:</h4>
+        <div class="url-block">
+"Crea 10 flashcards (pregunta-respuesta) sobre los siguientes conceptos de ciberseguridad: firewall, VPN, autenticacion multifactor, cifrado, malware. Formato: Pregunta: ... / Respuesta: ..."
+        </div>
+
+        <h4>Explicar conceptos dificiles:</h4>
+        <div class="url-block">
+"No entiendo bien como funciona el cifrado asimetrico. Explicamelo como si tuviera 10 años, usando una analogia del mundo real. Luego explicamelo de forma mas tecnica."
+        </div>
+
+        <h4>Preparar examenes:</h4>
+        <div class="url-block">
+"Tengo un examen de ciberseguridad mañana sobre estos temas: [lista de temas]. Hazme un quiz de 10 preguntas de opcion multiple. No me des las respuestas hasta que yo responda."
+        </div>
+
+        <div class="ejercicio">
+            <h4>🎯 Mini-ejercicio: Prueba ahora</h4>
+            <ol>
+                <li>Abre Gemini</li>
+                <li>Pidele que te cree 5 flashcards sobre cualquier tema de este curso</li>
+                <li>Practica respondiendolas</li>
+            </ol>
+        </div>
+
+        <!-- USO 3: VERIFICACION -->
+        <h3>🔍 Verificar Informacion (Anti-Alucinaciones)</h3>
+        <p><strong>Problema:</strong> Las IAs como Gemini pueden "alucinar" — inventar informacion que suena convincente pero es completamente falsa. En ciberseguridad, esto puede ser peligroso.</p>
+
+        <div class="warning">
+            <div class="tip-title">⚠️ Ejemplo real de alucinacion</div>
+            <p>Si preguntas "¿Quien escribio el framework MITRE ATT&CK?", Gemini podria inventar un nombre que suena real pero no existe. Siempre verifica datos especificos.</p>
+        </div>
+
+        <h4>Tecnicas para verificar:</h4>
+        <div class="steps">
+            <div class="step">
+                <div class="step-content">
+                    <h4>Pide fuentes</h4>
+                    <p>Agrega al final de tu prompt: "Incluye las fuentes de donde sacaste esta informacion"</p>
+                </div>
             </div>
-            <div class="feature-card">
-                <h4>💻 Analisis de Codigo</h4>
-                <p>Revisa, explica, corrige y mejora codigo en cualquier lenguaje de programacion.</p>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Haz preguntas de verificacion</h4>
+                    <p>Pregunta: "¿Estas seguro de eso? ¿Puedes verificar esa afirmacion?"</p>
+                </div>
             </div>
-            <div class="feature-card">
-                <h4>🖼️ Analisis de Imagenes</h4>
-                <p>Sube imagenes y Gemini las analiza, describe, extrae texto, o responde preguntas sobre ellas.</p>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Busca confirmacion externa</h4>
+                    <p>Para datos criticos, siempre busca en Google o fuentes oficiales</p>
+                </div>
             </div>
+            <div class="step">
+                <div class="step-content">
+                    <h4>Desconfia de especificos sospechosos</h4>
+                    <p>Fechas exactas, nombres de personas, estadisticas precisas — son los mas propensos a ser inventados</p>
+                </div>
+            </div>
+        </div>
+
+        <h4>Prompt para forzar honestidad:</h4>
+        <div class="url-block">
+"Respondeme la siguiente pregunta. Si no estas 100% seguro de algo, dilo claramente en lugar de inventar. Prefiero que digas 'no estoy seguro' a que me des informacion falsa: [tu pregunta]"
+        </div>
+
+        <div class="tip">
+            <div class="tip-title">📌 Regla de oro</div>
+            <p><strong>Gemini es excelente para ENTENDER conceptos, pero no para VERIFICAR hechos.</strong> Usalo para aprender y explicar, pero confirma datos especificos con fuentes oficiales.</p>
         </div>
     </section>
 
