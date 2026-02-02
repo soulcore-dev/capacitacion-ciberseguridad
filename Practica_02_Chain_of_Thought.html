@@ -12,10 +12,11 @@
             --secondary: #10b981;
             --accent: #f59e0b;
             --danger: #ef4444;
-            --dark: #1e1e2e;
-            --light: #f8fafc;
-            --gray: #64748b;
-            --border: #e2e8f0;
+            --dark: #f1f5f9;
+            --light: #000000;
+            --gray: #94a3b8;
+            --border: #1a1a1a;
+            --card-bg: #0a0a0a;
             --gemini: linear-gradient(135deg, #4285f4, #9b72cb, #d96570);
         }
 
@@ -49,11 +50,11 @@
         .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
 
         .section {
-            background: white;
+            background: var(--card-bg);
             border-radius: 16px;
             padding: 35px;
             margin-bottom: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             border: 1px solid var(--border);
         }
 
@@ -83,7 +84,7 @@
         p { color: var(--gray); margin-bottom: 12px; }
 
         .objetivo {
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            background: rgba(66, 133, 244, 0.15);
             border-left: 4px solid var(--primary);
             padding: 20px;
             border-radius: 0 12px 12px 0;
@@ -92,13 +93,13 @@
 
         .objetivo-title {
             font-weight: 700;
-            color: var(--primary-dark);
+            color: var(--primary);
             margin-bottom: 8px;
             font-size: 1.1rem;
         }
 
         .tip {
-            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            background: rgba(16, 185, 129, 0.15);
             border-left: 4px solid var(--secondary);
             padding: 18px;
             border-radius: 0 12px 12px 0;
@@ -107,12 +108,12 @@
 
         .tip-title {
             font-weight: 600;
-            color: #059669;
+            color: var(--secondary);
             margin-bottom: 6px;
         }
 
         .warning {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            background: rgba(245, 158, 11, 0.15);
             border-left: 4px solid var(--accent);
             padding: 18px;
             border-radius: 0 12px 12px 0;
@@ -121,12 +122,12 @@
 
         .warning-title {
             font-weight: 600;
-            color: #d97706;
+            color: var(--accent);
             margin-bottom: 6px;
         }
 
         .ejercicio-box {
-            background: linear-gradient(135deg, #fae8ff, #e9d5ff);
+            background: rgba(168, 85, 247, 0.15);
             border: 2px solid #a855f7;
             border-radius: 14px;
             padding: 25px;
@@ -134,7 +135,7 @@
         }
 
         .ejercicio-box h4 {
-            color: #7c3aed;
+            color: #c084fc;
             font-size: 1.15rem;
             margin: 0 0 15px;
         }
@@ -147,7 +148,7 @@
         .ejercicio-box li { margin-bottom: 10px; }
 
         .code-block {
-            background: #1e293b;
+            background: #111111;
             color: #e2e8f0;
             padding: 18px;
             border-radius: 8px;
@@ -156,10 +157,11 @@
             margin: 12px 0;
             overflow-x: auto;
             white-space: pre-wrap;
+            border: 1px solid #1a1a1a;
         }
 
         .bad-example {
-            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            background: rgba(239, 68, 68, 0.15);
             border: 2px dashed var(--danger);
             border-radius: 12px;
             padding: 18px;
@@ -176,7 +178,7 @@
         }
 
         .good-example {
-            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            background: rgba(16, 185, 129, 0.15);
             border: 2px solid var(--secondary);
             border-radius: 12px;
             padding: 18px;

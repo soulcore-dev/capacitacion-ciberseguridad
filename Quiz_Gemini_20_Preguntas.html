@@ -12,10 +12,11 @@
             --secondary: #10b981;
             --accent: #f59e0b;
             --danger: #ef4444;
-            --dark: #1e1e2e;
-            --light: #f8fafc;
-            --gray: #64748b;
-            --border: #e2e8f0;
+            --dark: #f1f5f9;
+            --light: #000000;
+            --gray: #94a3b8;
+            --border: #1a1a1a;
+            --card-bg: #0a0a0a;
             --gemini: linear-gradient(135deg, #4285f4, #9b72cb, #d96570);
         }
 
@@ -49,7 +50,7 @@
         .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
 
         .instrucciones {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            background: rgba(245, 158, 11, 0.15);
             border: 2px solid var(--accent);
             border-radius: 16px;
             padding: 30px;
@@ -57,7 +58,7 @@
         }
 
         .instrucciones h2 {
-            color: #d97706;
+            color: var(--accent);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -72,11 +73,11 @@
         .instrucciones li { margin-bottom: 8px; }
 
         .question-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 16px;
             padding: 30px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             border: 1px solid var(--border);
         }
 
@@ -108,18 +109,18 @@
         }
 
         .type-teoria {
-            background: #dbeafe;
-            color: var(--primary-dark);
+            background: rgba(66, 133, 244, 0.2);
+            color: #60a5fa;
         }
 
         .type-practica {
-            background: #d1fae5;
-            color: #059669;
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
         }
 
         .type-gemini {
-            background: #fae8ff;
-            color: #7c3aed;
+            background: rgba(168, 85, 247, 0.2);
+            color: #c084fc;
         }
 
         .question-text {
@@ -141,7 +142,7 @@
             align-items: flex-start;
             gap: 12px;
             padding: 15px;
-            background: var(--light);
+            background: #111111;
             border-radius: 10px;
             border: 2px solid var(--border);
             cursor: pointer;
@@ -150,7 +151,7 @@
 
         .option:hover {
             border-color: var(--primary);
-            background: #f0f4ff;
+            background: rgba(66, 133, 244, 0.1);
         }
 
         .option input[type="radio"] {
@@ -166,7 +167,7 @@
         }
 
         .hint {
-            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+            background: rgba(66, 133, 244, 0.15);
             border-left: 4px solid var(--primary);
             padding: 15px;
             border-radius: 0 10px 10px 0;
